@@ -4,7 +4,7 @@
  * Breast/Cervical Health, Government Health Schemes, and Myth Busters.
  */
 
-import type { UserHealthContext } from './conversationMemory.ts';
+import type { UserHealthContext } from './conversationMemory';
 
 export interface HealthSourceLink {
   name: string;

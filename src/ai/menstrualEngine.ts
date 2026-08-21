@@ -4,7 +4,7 @@
  * pain scale relief measures, and hormonal irregularity flags.
  */
 
-import type { UserHealthContext } from './conversationMemory.ts';
+import type { UserHealthContext } from './conversationMemory';
 
 export interface MenstrualEngineOutput {
   currentDay: number;

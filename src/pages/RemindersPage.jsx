@@ -4,10 +4,10 @@ import MobileBottomNav from '../components/layout/MobileBottomNav';
 import FloatingAIChat from '../components/common/FloatingAIChat';
 import { useHealthData } from '../context/HealthDataContext';
 import { useLanguage } from '../context/LanguageContext';
-import { Bell, Pill, Droplet, Calendar, Plus, CheckCircle2, Circle, Clock, Sparkles, AlertCircle, RefreshCw, X, Check } from 'lucide-react';
+import { Bell, Pill, Droplet, Calendar, Plus, CheckCircle2, Circle, Clock, Sparkles, AlertCircle, RefreshCw, X, Check, Trash2 } from 'lucide-react';
 
 const RemindersPage = () => {
-  const { reminders, addReminder, addOrUpdateReminder, rescheduleReminder, toggleReminder } = useHealthData();
+  const { reminders, addReminder, addOrUpdateReminder, rescheduleReminder, toggleReminder, deleteReminder } = useHealthData();
   const { t } = useLanguage();
   const [showAddModal, setShowAddModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -15,6 +15,7 @@ const RemindersPage = () => {
   const [type, setType] = useState('pill');
   const [repeat, setRepeat] = useState('Daily');
   const [notificationBanner, setNotificationBanner] = useState('');
+  const [reminderToDelete, setReminderToDelete] = useState(null);
 
   const handleAdd = (e) => {
     e.preventDefault();
@@ -157,33 +158,82 @@ const RemindersPage = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => toggleReminder(rem.id)}
-                  className={`p-2 rounded-full transition ${rem.completed ? 'text-teal-600' : 'text-slate-300 hover:text-purple-600'}`}
-                >
-                  {rem.completed ? <CheckCircle2 className="w-6 h-6 fill-teal-100" /> : <Circle className="w-6 h-6" />}
-                </button>
-              </div>
-
-              {!rem.completed && (
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <div className="flex items-center space-x-1">
                   <button
                     onClick={() => toggleReminder(rem.id)}
-                    className="flex-1 py-2 bg-teal-50 text-teal-800 rounded-xl font-bold text-xs hover:bg-teal-100 transition"
+                    className={`p-2 rounded-full transition ${rem.completed ? 'text-teal-600' : 'text-slate-300 hover:text-purple-600'}`}
+                    title="Toggle completion"
                   >
-                    Mark as Done
+                    {rem.completed ? <CheckCircle2 className="w-6 h-6 fill-teal-100" /> : <Circle className="w-6 h-6" />}
                   </button>
                   <button
-                    onClick={() => handleSnooze(rem.id)}
-                    className="py-2 px-3 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-200 transition"
+                    onClick={() => setReminderToDelete(rem)}
+                    className="p-2 rounded-full text-slate-300 hover:text-rose-600 hover:bg-rose-50 transition"
+                    title="Delete Reminder"
                   >
-                    Snooze (+15m)
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
-              )}
+              </div>
+
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                {!rem.completed ? (
+                  <>
+                    <button
+                      onClick={() => toggleReminder(rem.id)}
+                      className="flex-1 py-2 bg-teal-50 text-teal-800 rounded-xl font-bold text-xs hover:bg-teal-100 transition"
+                    >
+                      Mark as Done
+                    </button>
+                    <button
+                      onClick={() => handleSnooze(rem.id)}
+                      className="py-2 px-3 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-200 transition"
+                    >
+                      Snooze (+15m)
+                    </button>
+                  </>
+                ) : (
+                  <span className="text-xs text-teal-700 font-bold py-1 px-2 bg-teal-50 rounded-lg">✓ Completed</span>
+                )}
+              </div>
             </div>
           ))}
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {reminderToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+            <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 border border-rose-100 text-center">
+              <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+                <Trash2 className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">Delete Reminder?</h3>
+                <p className="text-xs text-slate-500 mt-1">
+                  Are you sure you want to delete <strong>"{reminderToDelete.title}"</strong>? This action cannot be undone.
+                </p>
+              </div>
+              <div className="flex items-center space-x-3 pt-2">
+                <button
+                  onClick={() => setReminderToDelete(null)}
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    deleteReminder(reminderToDelete.id);
+                    setNotificationBanner(`Deleted reminder "${reminderToDelete.title}".`);
+                    setReminderToDelete(null);
+                  }}
+                  className="flex-1 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold shadow-md hover:bg-rose-700 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Add Modal */}
         {showAddModal && (

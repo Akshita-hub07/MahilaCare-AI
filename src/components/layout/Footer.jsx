@@ -76,7 +76,7 @@ const Footer = () => {
               </div>
               <div className="flex items-start space-x-2.5">
                 <MapPin className="w-4 h-4 text-pink-400 shrink-0 mt-0.5" />
-                <span>NariCare Innovation Hub, HSR Layout, Bengaluru, Karnataka 560102</span>
+                <span>NariCare Innovation Hub, Pitampura, New Delhi 110055</span>
               </div>
             </div>
           </div>

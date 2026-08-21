@@ -187,6 +187,22 @@ export const HealthDataProvider = ({ children }) => {
     });
   };
 
+  const deleteHealthRecord = (id) => {
+    setHealthRecordsState((prev) => {
+      const updated = prev.filter((r) => r.id !== id);
+      if (user) userHealthStorage.saveHealthRecords(user, updated);
+      return updated;
+    });
+  };
+
+  const deleteReminder = (id) => {
+    setReminders((prev) => {
+      const updated = prev.filter((r) => r.id !== id);
+      if (user) userHealthStorage.saveReminders(user, updated);
+      return updated;
+    });
+  };
+
   return (
     <HealthDataContext.Provider
       value={{
@@ -195,6 +211,7 @@ export const HealthDataProvider = ({ children }) => {
         addOrUpdateReminder,
         rescheduleReminder,
         toggleReminder,
+        deleteReminder,
         cycleData,
         setCycleData,
         isPregnancyEnabled,
@@ -204,6 +221,7 @@ export const HealthDataProvider = ({ children }) => {
         healthRecords,
         addHealthRecord,
         updateHealthRecord,
+        deleteHealthRecord,
         doctors
       }}
     >

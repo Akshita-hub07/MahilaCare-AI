@@ -4,7 +4,7 @@
  * trimester milestones, maternal vitals alerts, and kick count activity.
  */
 
-import type { UserHealthContext } from './conversationMemory.ts';
+import type { UserHealthContext } from './conversationMemory';
 
 export interface PregnancyEngineOutput {
   enabled: boolean;

@@ -5,7 +5,7 @@
  * Preserves exact synthetic demo report values (CBC, Thyroid, Metabolic & Glycemic).
  */
 
-import type { UserHealthContext } from './conversationMemory.ts';
+import type { UserHealthContext } from './conversationMemory';
 
 export interface BiomarkerHighlight {
   parameter: string;

@@ -13,6 +13,7 @@ import { pregnancyEngine } from '../ai/pregnancyEngine.ts';
 import { symptomAnalyzer } from '../ai/symptomAnalyzer.ts';
 import { conversationMemory } from '../ai/conversationMemory.ts';
 import { userHealthStorage } from './userHealthStorage.js';
+import { stripQuestionsToAsk } from '../utils/textCleaner.js';
 
 const NARICARE_SYSTEM_INSTRUCTION = `
 You are NariCare AI, a 24/7 empathetic, expert conversational health & action assistant for women's healthcare.
@@ -91,16 +92,26 @@ export class LLMService {
       ? `[CONTEXT]\n${contextLines.join('\n')}\n\n[USER QUERY]\n${prompt}`
       : prompt;
 
-    // Adaptive maxTokens & system instruction optimized for 10-15s generation speed
-    const isReportRequest = prompt.includes('JSON block') || prompt.includes('JSON schema') || prompt.includes('Return JSON');
-    const maxTokens = isReportRequest ? 550 : 350;
+    // Adaptive maxTokens & system instruction optimized for report interpretation vs general chat vs feature pages
+    // Adaptive maxTokens & system instruction: Detailed clinical answers for feature pages; follow-up questions exclusively in voice_assistant
+    const isReportRequest = prompt.includes('JSON block') || prompt.includes('JSON schema') || prompt.includes('Return JSON') || pageContext === 'health_report';
+    const isVoiceAssistant = pageContext === 'voice_assistant';
+    const maxTokens = isReportRequest ? 1200 : 900;
 
-    const systemInstruction = isReportRequest
-      ? `You are NariCare AI, an expert clinical health assistant. Generate a detailed, multi-sentence health summary strictly matching the requested JSON schema.`
-      : NARICARE_SYSTEM_INSTRUCTION;
+    let systemInstruction = NARICARE_SYSTEM_INSTRUCTION;
 
-    // Slice recent conversation history to 4 turns for fast prompt evaluation
-    const recentHistory = (conversationHistory || []).slice(-4);
+    if (isReportRequest) {
+      systemInstruction = `You are NariCare AI, an expert clinical health assistant. Analyze ONLY the specific single report parameters and text content provided in the user query. Do NOT summarize the user's entire health history or combine unrelated past records. Explain what this specific report means in plain language, preserve all medical values, units, and dates exactly, and identify abnormal or important findings supported by the extracted report text strictly matching the requested JSON schema. DO NOT include any "Questions to ask your doctor" or question lists in the response.`;
+    } else if (!isVoiceAssistant) {
+      systemInstruction = `You are NariCare AI, a 24/7 expert conversational health assistant.
+Provide detailed, comprehensive, and thorough medical explanations using all relevant user health context (cycle logs, pregnancy details, vitals, stored history) provided in the prompt.
+Give proper, in-depth clinical explanations and summaries rather than generic or brief answers.
+DO NOT ask any follow-up questions. DO NOT include any "Questions to ask your doctor", "Questions to consider", or question sections. DO NOT append trailing questions like "Would you like to...", "Do you have any other symptoms?", "Would you like to book an appointment?", or "Should we proceed?".
+End your response cleanly with comprehensive, actionable medical guidance.`;
+    }
+
+    // Slice recent conversation history to 4 turns for fast prompt evaluation (or empty for report evaluation)
+    const recentHistory = isReportRequest ? [] : (conversationHistory || []).slice(-4);
 
     // 3. Delegate to the active LLM Provider
     const result = await this.provider.generateCompletion({
@@ -119,9 +130,19 @@ export class LLMService {
       };
     }
 
+    let finalResponseText = result.text;
+    if (!isVoiceAssistant && !isReportRequest && finalResponseText) {
+      // Remove "Questions to ask your doctor" sections and trailing question mark sentences on non-voice feature pages
+      finalResponseText = stripQuestionsToAsk(finalResponseText);
+      finalResponseText = finalResponseText
+        .replace(/(?:\s+|\n+)(?:Would|Do|Can|Shall|Are|Is|How|What|Should|Have|Could|May|Is there|Do you)\s+[\s\S]*?\?\s*$/i, '')
+        .replace(/(?:\s+|\n+)[^\n\.\!\?]+?\?\s*$/i, '')
+        .trim();
+    }
+
     return {
       error: false,
-      text: result.text,
+      text: finalResponseText,
       action: result.action,
       modelUsed: result.modelUsed
     };
@@ -139,6 +160,8 @@ export class LLMService {
     const memoryContext = conversationMemory.getContext();
 
     const p = prompt.toLowerCase();
+    const isReportReq = pageContext === 'health_report' || prompt.includes('JSON schema') || prompt.includes('JSON block');
+
     const appState = {
       selectedLanguage: language || memoryContext.language,
       userState: {
@@ -148,43 +171,45 @@ export class LLMService {
       }
     };
 
-    // 3. Build complete User Stored Health Memory from userHealthStorage
-    appState.userStoredHealthMemory = {
-      totalSavedRecords: storedUserData.records ? storedUserData.records.length : 0,
-      storedHealthRecords: (storedUserData.records || []).map(r => ({
-        id: r.id,
-        title: r.title,
-        doctor: r.doctor,
-        date: r.date,
-        category: r.type,
-        status: r.status,
-        sampleLabValues: (r.sampleValues || []).map(v => `${v.parameter}: ${v.value} (${v.status})`),
-        aiReportSummary: r.cachedAnalysis?.summary || (r.rawReportData ? r.rawReportData.slice(0, 250) : null)
-      })),
-      menstrualHistoryLogs: {
-        currentPhase: storedUserData.cycleData?.phase || 'Follicular Phase',
-        cycleDay: storedUserData.cycleData?.currentDay || 1,
-        cycleLengthDays: storedUserData.cycleData?.cycleLength || 28,
-        lastPeriodDate: storedUserData.cycleData?.lastPeriodStart || 'N/A',
-        loggedSymptoms: storedUserData.cycleData?.symptoms || [],
-        flowLevel: storedUserData.cycleData?.flowLevel || 'Medium',
-        painLevel: storedUserData.cycleData?.painLevel || 0
-      },
-      pregnancyCompanionDetails: {
-        enabled: !!storedUserData.isPregnancyEnabled,
-        gestationalWeek: storedUserData.pregnancyDetails?.week || null,
-        trimester: storedUserData.pregnancyDetails?.trimester || null,
-        dueDate: storedUserData.pregnancyDetails?.dueDate || null,
-        kicksToday: storedUserData.pregnancyDetails?.kicksToday || 0
-      },
-      symptomTriageLogs: (storedUserData.symptomHistory || []).map(s => ({
-        date: s.date || s.timestamp,
-        region: s.region || s.selectedRegion,
-        symptoms: s.symptoms || s.triageText,
-        urgency: s.urgencyLevel || s.urgency
-      })),
-      activeReminders: (storedUserData.reminders || []).map(rem => `${rem.title} (${rem.time})`)
-    };
+    // 3. Include userStoredHealthMemory only when NOT evaluating a single isolated health report
+    if (!isReportReq) {
+      appState.userStoredHealthMemory = {
+        totalSavedRecords: storedUserData.records ? storedUserData.records.length : 0,
+        storedHealthRecords: (storedUserData.records || []).map(r => ({
+          id: r.id,
+          title: r.title,
+          doctor: r.doctor,
+          date: r.date,
+          category: r.type,
+          status: r.status,
+          sampleLabValues: (r.sampleValues || []).map(v => `${v.parameter}: ${v.value} (${v.status})`),
+          aiReportSummary: r.cachedAnalysis?.summary || (r.rawReportData ? r.rawReportData.slice(0, 250) : null)
+        })),
+        menstrualHistoryLogs: {
+          currentPhase: storedUserData.cycleData?.phase || 'Follicular Phase',
+          cycleDay: storedUserData.cycleData?.currentDay || 1,
+          cycleLengthDays: storedUserData.cycleData?.cycleLength || 28,
+          lastPeriodDate: storedUserData.cycleData?.lastPeriodStart || 'N/A',
+          loggedSymptoms: storedUserData.cycleData?.symptoms || [],
+          flowLevel: storedUserData.cycleData?.flowLevel || 'Medium',
+          painLevel: storedUserData.cycleData?.painLevel || 0
+        },
+        pregnancyCompanionDetails: {
+          enabled: !!storedUserData.isPregnancyEnabled,
+          gestationalWeek: storedUserData.pregnancyDetails?.week || null,
+          trimester: storedUserData.pregnancyDetails?.trimester || null,
+          dueDate: storedUserData.pregnancyDetails?.dueDate || null,
+          kicksToday: storedUserData.pregnancyDetails?.kicksToday || 0
+        },
+        symptomTriageLogs: (storedUserData.symptomHistory || []).map(s => ({
+          date: s.date || s.timestamp,
+          region: s.region || s.selectedRegion,
+          symptoms: s.symptoms || s.triageText,
+          urgency: s.urgencyLevel || s.urgency
+        })),
+        activeReminders: (storedUserData.reminders || []).map(rem => `${rem.title} (${rem.time})`)
+      };
+    }
 
     // 4. Hospital / Doctor Intent -> Rank supplied hospitals deterministically
     if (

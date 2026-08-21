@@ -4,8 +4,8 @@
  * and contextual follow-up questions without diagnosing diseases or claiming diagnosis certainty.
  */
 
-import type { UserHealthContext } from './conversationMemory.ts';
-import type { StructuredIntentOutput } from './intentDetector.ts';
+import type { UserHealthContext } from './conversationMemory';
+import type { StructuredIntentOutput } from './intentDetector';
 
 export interface SymptomAnalysisOutput {
   severity: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';

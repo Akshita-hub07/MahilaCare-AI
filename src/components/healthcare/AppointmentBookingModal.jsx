@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { X, Calendar as CalendarIcon, Clock, CheckCircle2, Navigation, Car, AlertCircle, FileText, Share2, Plus } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Calendar as CalendarIcon, Clock, CheckCircle2, Navigation, Car, AlertCircle, FileText, Share2, Plus, Upload, Check } from 'lucide-react';
 import { createAppointmentBooking } from '../../services/hospitalBookingApi';
 import { googleCalendarService, googleMapsService } from '../../services/googleServices';
 import { useHealthData } from '../../context/HealthDataContext';
+import { extractTextFromFile } from '../../utils/documentExtractor';
 
 const TIME_SLOTS = ['09:00 AM', '10:30 AM', '02:00 PM', '04:30 PM', '06:00 PM'];
 
 const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport, initialNotes }) => {
-  const { addHealthRecord } = useHealthData();
+  const { addHealthRecord, updateHealthRecord } = useHealthData();
 
   const [selectedDate, setSelectedDate] = useState('2026-08-08');
   const [selectedTime, setSelectedTime] = useState('10:30 AM');
@@ -16,6 +17,10 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [createdRecordId, setCreatedRecordId] = useState(null);
+  const [attachedFileName, setAttachedFileName] = useState('');
+  const [isAttaching, setIsAttaching] = useState(false);
+  const appointmentFileInputRef = useRef(null);
 
   useEffect(() => {
     if (initialNotes && initialNotes.trim()) {
@@ -41,14 +46,43 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
     setIsSubmitting(false);
     setConfirmedBooking(result.appointment);
 
+    const newRecordId = `apt_rec_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    setCreatedRecordId(newRecordId);
+
     // Sync to Health Timeline
     addHealthRecord({
+      id: newRecordId,
       title: `Confirmed OPD: ${selectedDoctor}`,
       doctor: hospital?.name || 'Apollo Women Center',
       date: `${selectedDate} at ${selectedTime}`,
       type: 'Doctor Appointment',
-      status: 'Confirmed'
+      status: 'Confirmed (Awaiting Report)',
+      rawReportData: patientNotes
     });
+  };
+
+  const handleAttachReportFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsAttaching(true);
+    const blobUrl = URL.createObjectURL(file);
+    const res = await extractTextFromFile(file);
+    setIsAttaching(false);
+
+    setAttachedFileName(file.name);
+
+    if (createdRecordId && updateHealthRecord) {
+      updateHealthRecord(createdRecordId, {
+        fileName: file.name,
+        fileUrl: blobUrl,
+        fileObjectUrl: blobUrl,
+        fileTypeStr: file.type || '',
+        rawReportData: res.success ? res.text : (patientNotes || `Attached report: ${file.name}`),
+        status: 'Report Attached',
+        hasUnextractableContent: !res.success
+      });
+    }
   };
 
   const handleAddToCalendar = async () => {
@@ -185,6 +219,43 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
                 <span className="text-slate-500 font-semibold">Estimated Fee:</span>
                 <span className="font-bold text-slate-900">{confirmedBooking.estimatedCost}</span>
               </div>
+            </div>
+
+            {/* Attach Medical Report to Appointment Section */}
+            <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200 space-y-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-extrabold uppercase text-teal-900 flex items-center gap-1.5">
+                    <Upload className="w-4 h-4 text-teal-700" />
+                    Attach Report to this Appointment
+                  </h4>
+                  <p className="text-[11px] text-teal-800">Upload lab results or medical reports from your computer/desktop.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => appointmentFileInputRef.current?.click()}
+                  disabled={isAttaching}
+                  className="px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold shadow-md transition-all shrink-0 flex items-center space-x-1"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{isAttaching ? 'Attaching...' : attachedFileName ? 'Change Report' : 'Upload Report'}</span>
+                </button>
+              </div>
+
+              {attachedFileName && (
+                <div className="p-2 bg-white rounded-xl border border-teal-200 text-xs text-teal-950 font-semibold flex items-center space-x-2">
+                  <Check className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span className="truncate">Attached: {attachedFileName}</span>
+                </div>
+              )}
+
+              <input
+                type="file"
+                ref={appointmentFileInputRef}
+                onChange={handleAttachReportFile}
+                className="hidden"
+                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.txt,.csv"
+              />
             </div>
 
             {/* Documents Checklist */}

@@ -4,7 +4,7 @@
  * distance radius, waiting times, ratings, and home sample collection.
  */
 
-import type { UserHealthContext } from './conversationMemory.ts';
+import type { UserHealthContext } from './conversationMemory';
 
 export interface HospitalRecord {
   id: number;

@@ -50,3 +50,27 @@ export function stripCodeAndJsonFences(input) {
 
   return text;
 }
+
+/**
+ * Removes "Questions to ask your doctor", "Questions to consider", and any bulleted question lists
+ * from AI-generated summaries on non-voice feature pages.
+ */
+export function stripQuestionsToAsk(input) {
+  if (!input || typeof input !== 'string') return '';
+  let text = input;
+
+  // 1. Strip "Questions to ask..." headers and trailing question sections
+  text = text.replace(/(?:###?\s*|\*\*|__)?(?:Questions\s+to\s+ask[\s\S]*|Questions\s+for\s+your\s+doctor[\s\S]*|Questions\s+to\s+discuss[\s\S]*|Suggested\s+questions[\s\S]*|Questions\s+to\s+consider[\s\S]*)(?:\*\*|__)?/gi, '');
+
+  // 2. Filter out any lines or bullet points that end with a question mark (?)
+  const lines = text.split('\n');
+  const filteredLines = lines.filter(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return true;
+    if (/(?:Questions\s+to\s+ask|Questions\s+for\s+your\s+doctor|Questions\s+to\s+discuss|Suggested\s+questions|Questions\s+to\s+consider)/i.test(trimmed)) return false;
+    if (/^\s*[-*•\d\.]+\s+.*\?\s*$/i.test(trimmed)) return false;
+    return true;
+  });
+
+  return filteredLines.join('\n').trim();
+}

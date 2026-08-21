@@ -298,5 +298,39 @@ export const userHealthStorage = {
     } catch (err) {
       console.warn('userHealthStorage: Error saving chat history:', err);
     }
+  },
+
+  /**
+   * Deletes a specific health record by ID
+   */
+  deleteHealthRecord(user, recordId) {
+    if (!user || !recordId) return [];
+    const userKey = getUserStorageKey(user);
+    try {
+      const existing = this.loadUserData(user) || {};
+      const updatedRecords = (existing.records || []).filter(r => r.id !== recordId);
+      localStorage.setItem(userKey, JSON.stringify({ ...existing, records: updatedRecords }));
+      return updatedRecords;
+    } catch (err) {
+      console.warn('userHealthStorage: Error deleting health record:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Deletes a specific reminder by ID
+   */
+  deleteReminder(user, reminderId) {
+    if (!user || !reminderId) return [];
+    const userKey = getUserStorageKey(user);
+    try {
+      const existing = this.loadUserData(user) || {};
+      const updatedReminders = (existing.reminders || []).filter(r => r.id !== reminderId);
+      localStorage.setItem(userKey, JSON.stringify({ ...existing, reminders: updatedReminders }));
+      return updatedReminders;
+    } catch (err) {
+      console.warn('userHealthStorage: Error deleting reminder:', err);
+      return [];
+    }
   }
 };

@@ -6,7 +6,7 @@ import { llmService } from './llmService.js';
 import { conversationMemory } from '../ai/conversationMemory.ts';
 import { hospitalRankingEngine } from '../ai/hospitalRankingEngine.ts';
 import { reportInterpreter } from '../ai/reportInterpreter.ts';
-import { stripCodeAndJsonFences } from '../utils/textCleaner.js';
+import { stripCodeAndJsonFences, stripQuestionsToAsk } from '../utils/textCleaner.js';
 
 class GeminiAIService {
   setPageContext(context) {
@@ -252,26 +252,32 @@ ${schemaTemplate}
       summaryText = stripCodeAndJsonFences(response.text);
     }
 
-    summaryText = stripCodeAndJsonFences(summaryText);
+    summaryText = stripQuestionsToAsk(stripCodeAndJsonFences(summaryText));
+    const plainExpl = stripQuestionsToAsk(stripCodeAndJsonFences(parsed?.plainExplanation || summaryText));
+    const seekCare = stripQuestionsToAsk(stripCodeAndJsonFences(parsed?.whenToSeekCare || "Consult a healthcare professional if experiencing unusual fatigue, persistent discomfort, or severe symptoms."));
+
+    const cleanFindings = (parsed?.keyFindings || ["Report parameters parsed by NariCare AI."])
+      .map(f => stripQuestionsToAsk(stripCodeAndJsonFences(f)))
+      .filter(f => f && !/\?$/.test(f));
+    const cleanPrecautions = (parsed?.generalPrecautions || ["Maintain balanced nutrition and adequate rest.", "Keep records updated in your digital vault."])
+      .map(p => stripQuestionsToAsk(stripCodeAndJsonFences(p)))
+      .filter(p => p && !/\?$/.test(p));
 
     return {
       error: false,
       summary: summaryText || "NariCare AI report breakdown generated successfully.",
-      keyFindings: parsed?.keyFindings || ["Report parameters parsed by NariCare AI."],
+      keyFindings: cleanFindings,
       extractedValues: parsed?.extractedValues || parsed?.highlights || [],
       recommendedProducts: parsed?.recommendedProducts || [],
-      plainExplanation: parsed?.plainExplanation || summaryText,
-      generalPrecautions: parsed?.generalPrecautions || [
-        "Maintain balanced nutrition and adequate rest.",
-        "Keep records updated in your digital vault."
-      ],
+      plainExplanation: plainExpl,
+      generalPrecautions: cleanPrecautions,
       nextSteps: parsed?.nextSteps && parsed.nextSteps.length >= 2
-        ? parsed.nextSteps.slice(0, 3)
+        ? parsed.nextSteps.slice(0, 3).map(s => stripQuestionsToAsk(stripCodeAndJsonFences(s))).filter(s => s && !/\?$/.test(s))
         : [
             "Discuss report findings with a verified clinician during your next visit.",
             "Log symptoms or notes in your NariCare Health Timeline."
           ],
-      whenToSeekCare: parsed?.whenToSeekCare || "Consult a healthcare professional if experiencing unusual fatigue, persistent discomfort, or severe symptoms.",
+      whenToSeekCare: seekCare,
       suggestsFollowup: typeof parsed?.suggestsFollowup === 'boolean' ? parsed.suggestsFollowup : false,
       disclaimer: parsed?.disclaimer || "⚠️ NariCare AI provides health education based on reported data, not medical diagnosis."
     };
