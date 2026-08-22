@@ -6,7 +6,7 @@ import { llmService } from './llmService.js';
 import { conversationMemory } from '../ai/conversationMemory.ts';
 import { hospitalRankingEngine } from '../ai/hospitalRankingEngine.ts';
 import { reportInterpreter } from '../ai/reportInterpreter.ts';
-import { stripCodeAndJsonFences, stripQuestionsToAsk } from '../utils/textCleaner.js';
+import { stripCodeAndJsonFences, stripQuestionsToAsk, extractFieldFromUnparsedJson } from '../utils/textCleaner.js';
 
 class GeminiAIService {
   setPageContext(context) {
