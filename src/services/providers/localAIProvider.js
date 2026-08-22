@@ -111,16 +111,18 @@ export class LocalAIProvider extends BaseLLMProvider {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-      // Attempt 1: Call Vercel Serverless Endpoint (/api/chat)
-      try {
-        response = await fetch('/api/chat', {
-          method: 'POST',
-          headers,
-          body: JSON.stringify(requestBodyOpenAI),
-          signal: controller.signal
-        });
-      } catch (primaryErr) {
-        console.warn('[NariCare AI Engine] Serverless /api/chat fetch failed, trying direct endpoint...', primaryErr);
+      // Attempt 1: Call Vercel Serverless Endpoint (/api/chat) if in Browser or origin available
+      if (isBrowser || origin) {
+        try {
+          response = await fetch(primaryEndpoint, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(requestBodyOpenAI),
+            signal: controller.signal
+          });
+        } catch (primaryErr) {
+          console.warn('[NariCare AI Engine] Serverless /api/chat fetch failed, trying direct endpoint...', primaryErr);
+        }
       }
 
       clearTimeout(timeoutId);
