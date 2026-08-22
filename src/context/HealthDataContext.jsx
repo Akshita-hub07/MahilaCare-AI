@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
-import { userHealthStorage } from '../services/userHealthStorage';
+import { userHealthStorage, DEFAULT_INITIAL_RECORDS } from '../services/userHealthStorage';
 
 const HealthDataContext = createContext();
 
@@ -31,7 +31,7 @@ export const HealthDataProvider = ({ children }) => {
     bumpPhotos: []
   });
 
-  const [healthRecords, setHealthRecordsState] = useState([]);
+  const [healthRecords, setHealthRecordsState] = useState(DEFAULT_INITIAL_RECORDS);
   const [doctors] = useState([
     {
       id: 1,
@@ -76,10 +76,12 @@ export const HealthDataProvider = ({ children }) => {
 
   // Synchronize state with authenticated user storage upon mount or user change
   useEffect(() => {
-    const stored = user ? userHealthStorage.loadUserData(user) : null;
+    const stored = userHealthStorage.loadUserData(user);
     if (stored) {
       if (stored.records && stored.records.length > 0) {
         setHealthRecordsState(stored.records);
+      } else {
+        setHealthRecordsState(DEFAULT_INITIAL_RECORDS);
       }
       if (stored.cycleData) setCycleDataState(stored.cycleData);
       if (stored.pregnancyDetails) setPregnancyDetailsState(stored.pregnancyDetails);

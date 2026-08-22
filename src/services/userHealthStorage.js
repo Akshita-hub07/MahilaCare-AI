@@ -36,9 +36,9 @@ const getDynamicISODate = (daysOffset = 0) => {
 };
 
 /**
- * Default initial seed data for demonstration user (Ananya Sharma)
+ * Default initial seed data for demonstration user
  */
-const DEFAULT_INITIAL_RECORDS = [
+export const DEFAULT_INITIAL_RECORDS = [
   {
     id: 'rec_demo_101',
     isDemo: true,
@@ -125,8 +125,8 @@ export const userHealthStorage = {
    * Hydrates all health data for a given user from browser storage
    */
   loadUserData(user) {
-    if (!user) return null;
-    const userKey = getUserStorageKey(user);
+    const targetUser = user || { email: 'guest_user@naricare.ai', name: 'Guest User' };
+    const userKey = getUserStorageKey(targetUser);
 
     try {
       if (typeof localStorage === 'undefined') {
@@ -159,10 +159,15 @@ export const userHealthStorage = {
       }
 
       const parsed = JSON.parse(rawData);
-      // Ensure demo records are hydrated with sampleValues and old static cachedAnalysis is stripped
+      // Ensure default demo records are present if empty or missing
       if (!parsed.records || parsed.records.length === 0) {
         parsed.records = DEFAULT_INITIAL_RECORDS;
       } else {
+        const missingDemos = DEFAULT_INITIAL_RECORDS.filter(d => !parsed.records.some(r => r.id === d.id));
+        if (missingDemos.length > 0) {
+          parsed.records = [...DEFAULT_INITIAL_RECORDS.filter(d => missingDemos.some(m => m.id === d.id)), ...parsed.records];
+        }
+
         parsed.records = parsed.records.map((r) => {
           const { cachedAnalysis, ...rest } = r;
           const matchDefault = DEFAULT_INITIAL_RECORDS.find((d) => d.id === r.id);
@@ -172,10 +177,19 @@ export const userHealthStorage = {
           return rest;
         });
       }
+
       return parsed;
     } catch (err) {
       console.warn('userHealthStorage: Error loading user storage:', err);
-      return null;
+      return {
+        records: DEFAULT_INITIAL_RECORDS,
+        cycleData: DEFAULT_CYCLE_DATA,
+        pregnancyDetails: DEFAULT_PREGNANCY_DETAILS,
+        isPregnancyEnabled: false,
+        reminders: DEFAULT_REMINDERS,
+        symptomHistory: [],
+        chatHistory: []
+      };
     }
   },
 
