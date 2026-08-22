@@ -76,10 +76,11 @@ export const HealthDataProvider = ({ children }) => {
 
   // Synchronize state with authenticated user storage upon mount or user change
   useEffect(() => {
-    if (!user) return;
-    const stored = userHealthStorage.loadUserData(user);
+    const stored = user ? userHealthStorage.loadUserData(user) : null;
     if (stored) {
-      if (stored.records) setHealthRecordsState(stored.records);
+      if (stored.records && stored.records.length > 0) {
+        setHealthRecordsState(stored.records);
+      }
       if (stored.cycleData) setCycleDataState(stored.cycleData);
       if (stored.pregnancyDetails) setPregnancyDetailsState(stored.pregnancyDetails);
       if (typeof stored.isPregnancyEnabled === 'boolean') setIsPregnancyEnabledState(stored.isPregnancyEnabled);

@@ -130,22 +130,12 @@ export const userHealthStorage = {
 
     try {
       if (typeof localStorage === 'undefined') {
-        const isSampleUser = user?.email === 'ananya.sharma@example.com' || user?.name === 'Ananya Sharma' || user?.name === 'Ananya';
         return {
-          records: isSampleUser ? DEFAULT_INITIAL_RECORDS : [],
-          cycleData: isSampleUser ? DEFAULT_CYCLE_DATA : {
-            cycleLength: 28,
-            periodLength: 5,
-            lastPeriodStart: new Date().toISOString().split('T')[0],
-            currentDay: 1,
-            phase: 'Follicular Phase',
-            fertileDays: 'Not Calculated',
-            chanceOfPregnancy: 'Low',
-            symptoms: []
-          },
+          records: DEFAULT_INITIAL_RECORDS,
+          cycleData: DEFAULT_CYCLE_DATA,
           pregnancyDetails: DEFAULT_PREGNANCY_DETAILS,
           isPregnancyEnabled: false,
-          reminders: isSampleUser ? DEFAULT_REMINDERS : [],
+          reminders: DEFAULT_REMINDERS,
           symptomHistory: [],
           chatHistory: []
         };
@@ -153,23 +143,13 @@ export const userHealthStorage = {
 
       const rawData = localStorage.getItem(userKey);
       if (!rawData) {
-        // Seed default records if default sample user, otherwise empty schema for new users
-        const isSampleUser = user?.email === 'ananya.sharma@example.com' || user?.name === 'Ananya Sharma' || user?.name === 'Ananya';
+        // Seed default records so all users have initial demo records available
         const initialData = {
-          records: isSampleUser ? DEFAULT_INITIAL_RECORDS : [],
-          cycleData: isSampleUser ? DEFAULT_CYCLE_DATA : {
-            cycleLength: 28,
-            periodLength: 5,
-            lastPeriodStart: new Date().toISOString().split('T')[0],
-            currentDay: 1,
-            phase: 'Follicular Phase',
-            fertileDays: 'Not Calculated',
-            chanceOfPregnancy: 'Low',
-            symptoms: []
-          },
+          records: DEFAULT_INITIAL_RECORDS,
+          cycleData: DEFAULT_CYCLE_DATA,
           pregnancyDetails: DEFAULT_PREGNANCY_DETAILS,
           isPregnancyEnabled: false,
-          reminders: isSampleUser ? DEFAULT_REMINDERS : [],
+          reminders: DEFAULT_REMINDERS,
           symptomHistory: [],
           chatHistory: []
         };
@@ -180,7 +160,9 @@ export const userHealthStorage = {
 
       const parsed = JSON.parse(rawData);
       // Ensure demo records are hydrated with sampleValues and old static cachedAnalysis is stripped
-      if (parsed.records) {
+      if (!parsed.records || parsed.records.length === 0) {
+        parsed.records = DEFAULT_INITIAL_RECORDS;
+      } else {
         parsed.records = parsed.records.map((r) => {
           const { cachedAnalysis, ...rest } = r;
           const matchDefault = DEFAULT_INITIAL_RECORDS.find((d) => d.id === r.id);

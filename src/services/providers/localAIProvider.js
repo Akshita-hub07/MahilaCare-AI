@@ -82,8 +82,8 @@ export class LocalAIProvider extends BaseLLMProvider {
     });
 
     const isBrowser = typeof window !== 'undefined';
-    const primaryEndpoint = `${this.baseUrl}/v1/chat/completions`;
-    const proxyEndpoint = '/v1/chat/completions';
+    const origin = isBrowser && window.location?.origin ? window.location.origin : '';
+    const primaryEndpoint = origin ? `${origin}/api/chat` : '/api/chat';
     const requestId = `req_cloud_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
     console.log(`[NariCare AI Engine] START requestId=${requestId} model=${this.model} endpoint=${primaryEndpoint}`);
@@ -109,35 +109,46 @@ export class LocalAIProvider extends BaseLLMProvider {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-      // Attempt 1: Primary Cloud OpenAI Endpoint
+      // Attempt 1: Call Vercel Serverless Endpoint (/api/chat)
       try {
-        response = await fetch(primaryEndpoint, {
+        response = await fetch('/api/chat', {
           method: 'POST',
           headers,
           body: JSON.stringify(requestBodyOpenAI),
           signal: controller.signal
         });
       } catch (primaryErr) {
-        if (isBrowser) {
-          console.warn('[NariCare AI Engine] Primary Cloud endpoint fetch failed, trying proxy /v1/chat/completions...', primaryErr);
-          usedEndpoint = proxyEndpoint;
-          response = await fetch(proxyEndpoint, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(requestBodyOpenAI),
-            signal: controller.signal
-          }).catch(() => null);
-        }
+        console.warn('[NariCare AI Engine] Serverless /api/chat fetch failed, trying direct endpoint...', primaryErr);
       }
 
       clearTimeout(timeoutId);
 
-      // Attempt 2: Native Ollama Cloud Endpoint (/api/chat)
+      // Attempt 2: Direct Ollama Cloud Endpoint Fallback
+      if (!response || !response.ok) {
+        const cloudFallbackEndpoint = `${this.baseUrl}/v1/chat/completions`;
+        console.warn(`[NariCare AI Engine] Serverless /api/chat status=${response?.status || 'network_error'}, trying direct Ollama Cloud endpoint: ${cloudFallbackEndpoint}`);
+        usedEndpoint = cloudFallbackEndpoint;
+
+        try {
+          const fallbackController = new AbortController();
+          const fallbackTimeout = setTimeout(() => fallbackController.abort(), 5000);
+          response = await fetch(cloudFallbackEndpoint, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(requestBodyOpenAI),
+            signal: fallbackController.signal
+          });
+          clearTimeout(fallbackTimeout);
+        } catch (fallbackErr) {
+          console.warn('[NariCare AI Engine] Direct Cloud endpoint fetch error:', fallbackErr.message);
+        }
+      }
+
+      // Attempt 3: Native Ollama Cloud Endpoint (/api/chat on cloud host)
       if (!response || !response.ok) {
         const nativeEndpoint = `${this.baseUrl}/api/chat`;
-        console.warn(`[NariCare AI Engine] Cloud OpenAI endpoint status=${response?.status || 'network_error'}, trying native Ollama Cloud endpoint: ${nativeEndpoint}`);
         usedEndpoint = nativeEndpoint;
 
         const requestBodyNative = {
@@ -162,11 +173,11 @@ export class LocalAIProvider extends BaseLLMProvider {
         }
       }
 
-      // Attempt 3: Local Dev Engine Fallback (http://localhost:11434) if Cloud Key is placeholder/unauthorized in dev
+      // Attempt 4: Local Dev Engine Fallback (http://localhost:11434/api/chat)
       if (!response || response.status === 401 || response.status === 403 || !response.ok) {
         const cloudStatus = response?.status;
         const errorText = response ? await response.text().catch(() => '') : '';
-        console.error(`[NariCare AI Engine DIAGNOSTIC] Ollama Cloud Status: ${cloudStatus || 'FAILED'} | Endpoint: ${usedEndpoint} | Details: ${errorText || 'No response'}`);
+        console.error(`[NariCare AI Engine DIAGNOSTIC] Serverless/Cloud Status: ${cloudStatus || 'FAILED'} | Endpoint: ${usedEndpoint} | Details: ${errorText || 'No response'}`);
 
         // Try local Ollama server if running on port 11434
         const localFallbackEndpoint = 'http://localhost:11434/api/chat';
@@ -205,7 +216,7 @@ export class LocalAIProvider extends BaseLLMProvider {
       const data = await response.json();
       console.log(`[NariCare AI Engine] END requestId=${requestId} status=200 endpoint=${usedEndpoint}`);
 
-      const rawText = data?.choices?.[0]?.message?.content?.trim() || data?.message?.content?.trim() || (typeof data?.response === 'string' ? data.response.trim() : null);
+      const rawText = data?.choices?.[0]?.message?.content?.trim() || data?.message?.content?.trim() || (typeof data?.response === 'string' ? data.response.trim() : (typeof data?.text === 'string' ? data.text.trim() : null));
 
       if (!rawText) {
         console.error(`[NariCare AI Engine] Received empty response content.`);

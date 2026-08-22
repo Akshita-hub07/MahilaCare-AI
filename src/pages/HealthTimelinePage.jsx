@@ -23,11 +23,14 @@ const HealthTimelinePage = () => {
   const [newType, setNewType] = useState('Lab Report');
   const [rawTextNotes, setRawTextNotes] = useState('');
   const [selectedFileObj, setSelectedFileObj] = useState(null);
+  const [fileObjectUrl, setFileObjectUrl] = useState('');
+  const [fileTypeStr, setFileTypeStr] = useState('');
   const [extractedFileText, setExtractedFileText] = useState('');
   const [isExtractingText, setIsExtractingText] = useState(false);
   const [extractionErrorMessage, setExtractionErrorMessage] = useState('');
   const [isBinaryFile, setIsBinaryFile] = useState(false);
 
+  const fileInputRef = useRef(null);
   const [activeUploadTargetRecord, setActiveUploadTargetRecord] = useState(null);
   const appointmentFileInputRef = useRef(null);
 
