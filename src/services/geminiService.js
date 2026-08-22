@@ -243,20 +243,24 @@ ${schemaTemplate}
 
     let summaryText = parsed?.summary;
     if (!summaryText) {
-      const match = response.text.match(/"summary"\s*:\s*"([^"]+)"/i);
-      if (match && match[1]) {
-        summaryText = match[1];
-      }
+      summaryText = extractFieldFromUnparsedJson(rawJsonStr, 'summary') || extractFieldFromUnparsedJson(response.text, 'summary');
     }
     if (!summaryText) {
       summaryText = stripCodeAndJsonFences(response.text);
     }
 
     summaryText = stripQuestionsToAsk(stripCodeAndJsonFences(summaryText));
-    const plainExpl = stripQuestionsToAsk(stripCodeAndJsonFences(parsed?.plainExplanation || summaryText));
-    const seekCare = stripQuestionsToAsk(stripCodeAndJsonFences(parsed?.whenToSeekCare || "Consult a healthcare professional if experiencing unusual fatigue, persistent discomfort, or severe symptoms."));
+    const rawPlainExpl = parsed?.plainExplanation || extractFieldFromUnparsedJson(rawJsonStr, 'plainExplanation') || summaryText;
+    const plainExpl = stripQuestionsToAsk(stripCodeAndJsonFences(rawPlainExpl));
+    const seekCare = stripQuestionsToAsk(stripCodeAndJsonFences(parsed?.whenToSeekCare || extractFieldFromUnparsedJson(rawJsonStr, 'whenToSeekCare') || "Consult a healthcare professional if experiencing unusual fatigue, persistent discomfort, or severe symptoms."));
 
-    const cleanFindings = (parsed?.keyFindings || ["Report parameters parsed by NariCare AI."])
+    let rawFindings = parsed?.keyFindings;
+    if (!rawFindings || !Array.isArray(rawFindings)) {
+      const extracted = extractFieldFromUnparsedJson(rawJsonStr, 'keyFindings');
+      if (Array.isArray(extracted)) rawFindings = extracted;
+    }
+
+    const cleanFindings = (rawFindings || ["Report parameters parsed by NariCare AI."])
       .map(f => stripQuestionsToAsk(stripCodeAndJsonFences(f)))
       .filter(f => f && !/\?$/.test(f));
     const cleanPrecautions = (parsed?.generalPrecautions || ["Maintain balanced nutrition and adequate rest.", "Keep records updated in your digital vault."])
