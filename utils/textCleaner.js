@@ -1,5 +1,5 @@
 /**
- * NariCare AI - Text Cleaner Utility
+ * MahilaCare AI - Text Cleaner Utility
  * Completely strips markdown code blocks, JSON code fences (```json ... ```),
  * and raw JSON strings from user-visible AI responses.
  */

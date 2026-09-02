@@ -19,14 +19,14 @@ const LearnMoreModal = ({ isOpen, onClose }) => {
             <Sparkles className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-2xl font-extrabold text-slate-900">About NariCare AI</h3>
+            <h3 className="text-2xl font-extrabold text-slate-900">About MahilaCare AI</h3>
             <p className="text-sm text-purple-600 font-medium">Empowering Women's Health with Intelligent AI</p>
           </div>
         </div>
 
         <div className="bg-purple-50/70 border border-purple-100 rounded-2xl p-5 mb-6 text-slate-700 leading-relaxed text-sm">
           <p className="font-medium text-purple-900 mb-2">Our Mission:</p>
-          "NariCare AI is an AI-powered healthcare platform designed specifically for women. It provides intelligent healthcare guidance, symptom analysis, hospital recommendations, appointment booking, home diagnostics, transport assistance, menstrual and pregnancy care, digital health records, multilingual support and personalized healthcare management."
+          "MahilaCare AI is an AI-powered healthcare platform designed specifically for women. It provides intelligent healthcare guidance, symptom analysis, hospital recommendations, appointment booking, home diagnostics, transport assistance, menstrual and pregnancy care, digital health records, multilingual support and personalized healthcare management."
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">

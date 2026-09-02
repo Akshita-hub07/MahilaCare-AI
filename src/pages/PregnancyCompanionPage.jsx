@@ -132,7 +132,7 @@ const PregnancyCompanionPage = () => {
               <div className="flex items-center justify-between border-b border-purple-100 pb-3">
                 <h3 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-purple-600" />
-                  {t('pregnancyPage.aiBoxHeader', 'NariCare AI Weekly Guidance & Nutrition')}
+                  {t('pregnancyPage.aiBoxHeader', 'MahilaCare AI Weekly Guidance & Nutrition')}
                 </h3>
                 <button
                   onClick={handleAskAIGuidance}
@@ -148,14 +148,14 @@ const PregnancyCompanionPage = () => {
                 <div className="p-6 rounded-2xl bg-purple-50/50 border border-purple-100 text-center space-y-2 animate-pulse">
                   <RefreshCw className="w-6 h-6 text-purple-600 animate-spin mx-auto" />
                   <p className="text-xs font-bold text-purple-900">
-                    NariCare AI is analyzing Week {pregnancyDetails.week} fetal development milestones, kick count ({kickCount}), and maternal vitals ({weight}, {bp}, {bloodSugar})...
+                    MahilaCare AI is analyzing Week {pregnancyDetails.week} fetal development milestones, kick count ({kickCount}), and maternal vitals ({weight}, {bp}, {bloodSugar})...
                   </p>
                 </div>
               ) : aiPregnancyReport ? (
                 aiPregnancyReport.error ? (
                   <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-2">
                     <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
-                    <span>{aiPregnancyReport.summary || 'NariCare AI is temporarily unavailable. Please try again shortly.'}</span>
+                    <span>{aiPregnancyReport.summary || 'MahilaCare AI is temporarily unavailable. Please try again shortly.'}</span>
                   </div>
                 ) : (
                   <div className="space-y-4 animate-fade-in text-xs text-slate-700">

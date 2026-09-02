@@ -49,7 +49,7 @@ const DesktopSidebar = () => {
         </div>
         <div>
           <span className="text-xl font-extrabold text-slate-900 tracking-tight flex items-center gap-1">
-            NariCare
+            MahilaCare
             <span className="text-xs px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-bold">
               AI
             </span>
@@ -96,29 +96,32 @@ const DesktopSidebar = () => {
       {/* User Profile Mini Footer */}
       <div className="pt-4 border-t border-slate-100 mt-4">
         <div className="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
-          <div className="flex items-center space-x-3 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center shrink-0">
-              {user.name ? user.name[0] : 'A'}
-            </div>
-            <div className="overflow-hidden">
-              <p className="text-xs font-bold text-slate-800 truncate">{user.name}</p>
-              <p className="text-[10px] text-teal-600 font-medium truncate">Radius: {user.radius || '10 km'}</p>
+          <div className="flex items-center space-x-2.5 truncate">
+            <img
+              src={user?.photoURL || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200'}
+              alt={user?.displayName || 'User'}
+              className="w-8 h-8 rounded-xl object-cover shrink-0 border border-purple-200"
+            />
+            <div className="truncate">
+              <p className="text-xs font-bold text-slate-900 truncate">{user?.displayName || 'Ananya Sharma'}</p>
+              <p className="text-[10px] text-slate-500 truncate">{user?.email || 'ananya@example.com'}</p>
             </div>
           </div>
+
           <button
-            onClick={() => {
-              logout();
-              navigate('/');
-            }}
-            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors"
-            title="Logout"
+            onClick={logout}
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors shrink-0"
+            title="Sign Out"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      <LanguageSelectorModal isOpen={isLangModalOpen} onClose={() => setIsLangModalOpen(false)} />
+      <LanguageSelectorModal
+        isOpen={isLangModalOpen}
+        onClose={() => setIsLangModalOpen(false)}
+      />
     </aside>
   );
 };

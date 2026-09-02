@@ -35,7 +35,7 @@ const PermissionsPage = () => {
               {t('permissionsPage.title', 'App Permissions & Privacy')}
             </h2>
             <p className="text-sm text-slate-600 max-w-md mx-auto">
-              {t('permissionsPage.subtitle', 'To deliver a seamless, personalized healthcare experience, NariCare AI requests the following permissions.')}
+              {t('permissionsPage.subtitle', 'To deliver a seamless, personalized healthcare experience, MahilaCare AI requests the following permissions.')}
             </p>
           </div>
 

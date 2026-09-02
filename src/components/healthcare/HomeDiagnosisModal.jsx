@@ -32,7 +32,7 @@ const HomeDiagnosisModal = ({ isOpen, onClose, provider = 'Apollo Diagnostics Do
         package: selectedPkg,
         date: collectionDate,
         slot: collectionSlot,
-        deliveryTime: 'Within 24 Hours via WhatsApp & NariCare App'
+        deliveryTime: 'Within 24 Hours via WhatsApp & MahilaCare App'
       };
       setConfirmedBooking(confirmed);
 

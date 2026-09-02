@@ -79,10 +79,10 @@ const RemindersPage = () => {
         <div className="p-5 rounded-3xl bg-gradient-to-r from-purple-950 via-purple-900 to-teal-900 text-white space-y-3 shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 text-xs font-bold text-teal-300 uppercase tracking-wider">
-              <Sparkles className="w-4 h-4" /> Nari AI Reminder Optimizer
+              <Sparkles className="w-4 h-4" /> Mahila AI Reminder Optimizer
             </div>
             <p className="text-xs sm:text-sm text-purple-100 leading-relaxed font-light">
-              "Based on your daily routine, Nari AI suggests taking Iron & Folic Acid supplements after your lunch around <strong>02:00 PM</strong> for 35% higher absorption."
+              "Based on your daily routine, Mahila AI suggests taking Iron & Folic Acid supplements after your lunch around <strong>02:00 PM</strong> for 35% higher absorption."
             </p>
           </div>
           <button

@@ -1,5 +1,5 @@
 /**
- * NariCare AI Document Text Extractor
+ * MahilaCare AI Document Text Extractor
  *
  * Converts PDF, DOCX, Plain Text, and Image files into readable text strings
  * before sending to Ollama Cloud AI API.
@@ -46,7 +46,7 @@ export async function extractTextFromFile(file) {
         return {
           success: false,
           text: '',
-          userMessage: 'NariCare AI could not extract readable text from this document. The file appears to be empty or unreadable.'
+          userMessage: 'MahilaCare AI could not extract readable text from this document. The file appears to be empty or unreadable.'
         };
       }
       return { success: true, text: text.trim() };
@@ -61,7 +61,7 @@ export async function extractTextFromFile(file) {
         return {
           success: false,
           text: '',
-          userMessage: 'NariCare AI could not extract readable text from this Word document. Please ensure the file contains plain text or enter test parameters directly.'
+          userMessage: 'MahilaCare AI could not extract readable text from this Word document. Please ensure the file contains plain text or enter test parameters directly.'
         };
       }
       return { success: true, text: text.trim() };
@@ -75,7 +75,7 @@ export async function extractTextFromFile(file) {
         return {
           success: false,
           text: '',
-          userMessage: 'NariCare AI could not extract readable text from this PDF report. Please ensure the PDF is not an unscanned binary image or enter the report values directly.'
+          userMessage: 'MahilaCare AI could not extract readable text from this PDF report. Please ensure the PDF is not an unscanned binary image or enter the report values directly.'
         };
       }
       return { success: true, text: pdfText.trim() };
@@ -88,7 +88,7 @@ export async function extractTextFromFile(file) {
         return {
           success: false,
           text: '',
-          userMessage: 'NariCare AI could not read text from this report image. Please upload a clearer scan or enter the lab results manually.'
+          userMessage: 'MahilaCare AI could not read text from this report image. Please upload a clearer scan or enter the lab results manually.'
         };
       }
       return { success: true, text: ocrText.trim() };
@@ -98,7 +98,7 @@ export async function extractTextFromFile(file) {
     return {
       success: false,
       text: '',
-      userMessage: `NariCare AI cannot parse binary file format (${extension || 'unknown'}). Please upload a PDF, DOCX, TXT, or Image report.`
+      userMessage: `MahilaCare AI cannot parse binary file format (${extension || 'unknown'}). Please upload a PDF, DOCX, TXT, or Image report.`
     };
 
   } catch (error) {
@@ -106,7 +106,7 @@ export async function extractTextFromFile(file) {
     return {
       success: false,
       text: '',
-      userMessage: 'NariCare AI could not extract readable text from this file. Please make sure the report format is valid or enter test parameters manually.'
+      userMessage: 'MahilaCare AI could not extract readable text from this file. Please make sure the report format is valid or enter test parameters manually.'
     };
   }
 }
@@ -297,7 +297,7 @@ async function performImageOCR(file) {
  * Converts extracted medical text and parameters into a downloadable Word (.doc) document Blob
  */
 export function generateWordDocumentBlob(title, textContent, sampleValues = []) {
-  const safeTitle = title || 'NariCare Converted Health Report';
+  const safeTitle = title || 'MahilaCare Converted Health Report';
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   
   let valuesTableHtml = '';
@@ -346,7 +346,7 @@ export function generateWordDocumentBlob(title, textContent, sampleValues = []) 
     <body>
       <div class="header">
         <h1 class="title">${safeTitle}</h1>
-        <div class="subtitle">NariCare AI Health Vault • Converted Medical Document</div>
+        <div class="subtitle">MahilaCare AI Health Vault • Converted Medical Document</div>
         <div class="badge">Verified Text Representation • Date: ${dateStr}</div>
       </div>
 
@@ -356,7 +356,7 @@ export function generateWordDocumentBlob(title, textContent, sampleValues = []) 
       <div class="content-box">${textContent || 'No readable text layer extracted.'}</div>
 
       <div class="footer">
-        Confidential Patient Record • Automatically Converted by NariCare AI Document Engine
+        Confidential Patient Record • Automatically Converted by MahilaCare AI Document Engine
       </div>
     </body>
     </html>

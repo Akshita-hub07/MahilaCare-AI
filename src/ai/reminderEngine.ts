@@ -33,7 +33,7 @@ export class ReminderEngine {
     const nextPendingReminder = pending[0] || null;
 
     const tips = [
-      "Nari AI Optimization: Take Iron & Folic Acid supplements 30 mins after lunch at 02:00 PM with citrus juice for +35% higher bioavailability.",
+      "Mahila AI Optimization: Take Iron & Folic Acid supplements 30 mins after lunch at 02:00 PM with citrus juice for +35% higher bioavailability.",
       "Calcium supplements should be taken at a separate time from Iron (at least 2 hours apart) to prevent absorption competition.",
       "Hydration Target: Drink 500ml water every 3 hours for optimal cellular hydration."
     ];

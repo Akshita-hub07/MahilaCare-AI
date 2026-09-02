@@ -217,7 +217,7 @@ const LandingPage = () => {
               {t('landing.careEngineHeading', 'Everything Every Woman Needs for Complete Health & Care')}
             </h3>
             <p className="text-slate-600 text-base">
-              {t('landing.careEngineSub', "From monthly cycle tracking to emergency hospital care and AI symptom diagnosis, NariCare AI is built for every stage of a woman's life.")}
+              {t('landing.careEngineSub', "From monthly cycle tracking to emergency hospital care and AI symptom diagnosis, MahilaCare AI is built for every stage of a woman's life.")}
             </p>
           </div>
 
@@ -262,7 +262,7 @@ const LandingPage = () => {
             {t('landing.motherTongueTitle', 'Healthcare in Your Mother Tongue')}
           </h3>
           <p className="text-slate-600 max-w-2xl mx-auto text-sm sm:text-base">
-            {t('landing.motherTongueSub', 'No language barriers. Use NariCare AI effortlessly in English, Hindi, Hinglish, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, or Malayalam.')}
+            {t('landing.motherTongueSub', 'No language barriers. Use MahilaCare AI effortlessly in English, Hindi, Hinglish, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, or Malayalam.')}
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto pt-2">

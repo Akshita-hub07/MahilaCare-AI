@@ -11,18 +11,18 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
         unextractableContent: true,
         reportTitle: reportTitle || "Medical Record / Lab Report",
         overallStatus: "Content Unextractable",
-        summary: "This file has been securely stored in your NariCare Health Vault. However, text extraction is not available for this binary file type without OCR. NariCare AI will not generate an interpretation from missing content.",
+        summary: "This file has been securely stored in your MahilaCare Health Vault. However, text extraction is not available for this binary file type without OCR. MahilaCare AI will not generate an interpretation from missing content.",
         keyFindings: ["Document file stored in vault"],
         extractedValues: [],
         plainExplanation: "To get an AI analysis for this report, please re-upload or enter the test parameters and text summary directly.",
         generalPrecautions: ["Always keep physical or original digital copies of your official medical reports."],
         nextSteps: [
-          "Store original file safely in your NariCare Vault.",
+          "Store original file safely in your MahilaCare Vault.",
           "Optionally enter text results to generate AI breakdown."
         ],
         whenToSeekCare: "Consult a healthcare professional for clinical evaluation of your original medical documents.",
         suggestsFollowup: false,
-        disclaimer: "⚠️ NariCare AI requires readable report text parameters to perform analysis."
+        disclaimer: "⚠️ MahilaCare AI requires readable report text parameters to perform analysis."
       };
     }
 
@@ -54,18 +54,18 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
         ? aiReport.nextSteps.slice(0, 3) 
         : [
             "Discuss report findings with a verified clinician during your next visit.",
-            "Save record in your NariCare Health Timeline."
+            "Save record in your MahilaCare Health Timeline."
           ],
       whenToSeekCare: aiReport.whenToSeekCare || "Seek prompt medical care if experiencing severe symptoms or high fever.",
       suggestsFollowup: !!aiReport.suggestsFollowup,
-      disclaimer: aiReport.disclaimer || "⚠️ NariCare AI provides health education, not medical diagnosis."
+      disclaimer: aiReport.disclaimer || "⚠️ MahilaCare AI provides health education, not medical diagnosis."
     };
   } catch (err) {
     console.error("Report Analysis Error:", err);
     return {
       reportTitle: reportTitle || "Lab Report",
       overallStatus: "Analysis Completed",
-      summary: "Report saved in NariCare Health Vault. Please discuss findings with a qualified clinician.",
+      summary: "Report saved in MahilaCare Health Vault. Please discuss findings with a qualified clinician.",
       keyFindings: ["Document uploaded to health vault"],
       extractedValues: [],
       plainExplanation: "Analysis completed. Bring original report to your healthcare provider.",
@@ -76,7 +76,7 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
       ],
       whenToSeekCare: "Consult a clinician if you have concerns about your health.",
       suggestsFollowup: false,
-      disclaimer: "⚠️ NariCare AI provides health education, not medical diagnosis."
+      disclaimer: "⚠️ MahilaCare AI provides health education, not medical diagnosis."
     };
   }
 };

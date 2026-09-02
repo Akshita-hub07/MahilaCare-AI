@@ -74,7 +74,7 @@ const HealthEducationPage = () => {
               {t('educationPage.title', 'AI Health Education')}
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 max-w-2xl mt-1">
-              {t('educationPage.subtitle', "Ask any women's health topic conversationally. NariCare AI synthesizes verified evidence into your selected language.")}
+              {t('educationPage.subtitle', "Ask any women's health topic conversationally. MahilaCare AI synthesizes verified evidence into your selected language.")}
             </p>
           </div>
         </div>
@@ -130,7 +130,7 @@ const HealthEducationPage = () => {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-purple-200 shadow-md space-y-4 animate-in fade-in">
             <div className="flex items-center gap-2 text-purple-700 font-extrabold text-base border-b border-purple-100 pb-3">
               <Sparkles className="w-5 h-5 text-purple-600" />
-              NariCare AI Educational Summary
+              MahilaCare AI Educational Summary
             </div>
             <div className="bg-purple-50/40 p-6 rounded-2xl border border-purple-100">
               <FormattedText text={aiEducationResponse} />

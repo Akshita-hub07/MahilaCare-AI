@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
-import { LayoutDashboard, MapPin, Stethoscope, Calendar, UserCheck } from 'lucide-react';
+import { LayoutDashboard, MapPin, Stethoscope, Bell, UserCheck } from 'lucide-react';
 
 const MobileBottomNav = () => {
   const { t } = useLanguage();
@@ -10,7 +10,7 @@ const MobileBottomNav = () => {
     { path: '/dashboard', label: t('navDashboard'), icon: LayoutDashboard },
     { path: '/nearby', label: t('navNearby'), icon: MapPin },
     { path: '/ai-navigator', label: t('navAINavigator'), icon: Stethoscope },
-    { path: '/menstrual', label: t('navMenstrual'), icon: Calendar },
+    { path: '/reminders', label: t('navReminders', 'Reminders'), icon: Bell },
     { path: '/profile', label: t('navProfile'), icon: UserCheck }
   ];
 

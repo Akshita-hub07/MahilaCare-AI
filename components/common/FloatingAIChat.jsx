@@ -40,7 +40,7 @@ const FloatingAIChat = () => {
       {
         id: 1,
         sender: 'nari',
-        text: `Hello ${user?.name || 'there'}! I am **NariCare AI**, your 24/7 personal health companion. Ask me any health question or speak to navigate NariCare pages.`,
+        text: `Hello ${user?.name || 'there'}! I am **MahilaCare AI**, your 24/7 personal health companion. Ask me any health question or speak to navigate MahilaCare pages.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ];
@@ -70,7 +70,7 @@ const FloatingAIChat = () => {
       {
         id: 1,
         sender: 'nari',
-        text: `Hello ${user?.name || 'there'}! I am **NariCare AI**, your 24/7 personal health companion. Ask me any health question or speak to navigate NariCare pages.`,
+        text: `Hello ${user?.name || 'there'}! I am **MahilaCare AI**, your 24/7 personal health companion. Ask me any health question or speak to navigate MahilaCare pages.`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
@@ -253,7 +253,7 @@ const FloatingAIChat = () => {
         <button
           onClick={() => setIsOpen(true)}
           className="group relative flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-full shadow-2xl hover:shadow-purple-300/50 hover:scale-105 transition-all duration-300 active:scale-95"
-          aria-label="Open Nari AI Assistant"
+          aria-label="Open Mahila AI Assistant"
         >
           <div className="relative">
             <Bot className="w-6 h-6 animate-pulse" />
@@ -288,7 +288,7 @@ const FloatingAIChat = () => {
                     {
                       id: Date.now(),
                       sender: 'nari',
-                      text: `Hello ${user?.name || 'there'}! I am **NariCare AI**, your 24/7 personal health companion. Ask me any health question or speak to navigate NariCare pages.`,
+                      text: `Hello ${user?.name || 'there'}! I am **MahilaCare AI**, your 24/7 personal health companion. Ask me any health question or speak to navigate MahilaCare pages.`,
                       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     }
                   ];

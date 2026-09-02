@@ -26,9 +26,9 @@ async function testLiveOllama() {
 
   const start = Date.now();
   const res = await provider.generateCompletion({
-    prompt: "Give a brief 1-sentence warm greeting for NariCare AI.",
+    prompt: "Give a brief 1-sentence warm greeting for MahilaCare AI.",
     conversationHistory: [],
-    systemInstruction: "You are NariCare AI, a warm health assistant.",
+    systemInstruction: "You are MahilaCare AI, a warm health assistant.",
     temperature: 0.3,
     maxTokens: 50
   });

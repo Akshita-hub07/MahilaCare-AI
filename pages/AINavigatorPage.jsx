@@ -45,7 +45,7 @@ const AINavigatorPage = () => {
   const [triageResult, setTriageResult] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
 
-  // Handle Clinical Triage Execution via NariCare AI / Ollama
+  // Handle Clinical Triage Execution via MahilaCare AI / Ollama
   const handleRunTriage = async (e) => {
     e?.preventDefault();
     if (!triageText.trim()) return;
@@ -124,7 +124,7 @@ const AINavigatorPage = () => {
               AI Symptom Triage & Risk Evaluation
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
-              Enter your current physical symptoms to receive clinical risk triage, medical urgency guidance, and personalized next steps powered by NariCare AI.
+              Enter your current physical symptoms to receive clinical risk triage, medical urgency guidance, and personalized next steps powered by MahilaCare AI.
             </p>
           </div>
         </div>
@@ -194,7 +194,7 @@ const AINavigatorPage = () => {
                 className="w-full py-4 bg-gradient-to-r from-purple-600 via-violet-600 to-teal-500 text-white rounded-2xl font-extrabold text-xs sm:text-sm shadow-md hover:opacity-95 transition flex items-center justify-center gap-2"
               >
                 {isTyping ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
-                <span>Evaluate Symptoms with NariCare AI 🌸</span>
+                <span>Evaluate Symptoms with MahilaCare AI 🌸</span>
               </button>
             </form>
           </div>
@@ -246,7 +246,7 @@ const AINavigatorPage = () => {
                 <div className="space-y-2 max-w-md">
                   <h3 className="font-extrabold text-slate-900 text-xl">Clinical Triage Ready</h3>
                   <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                    Submit your symptoms on the left to receive instant urgency triage, risk level estimation, and intelligent medical follow-up guidance powered by NariCare AI.
+                    Submit your symptoms on the left to receive instant urgency triage, risk level estimation, and intelligent medical follow-up guidance powered by MahilaCare AI.
                   </p>
                 </div>
 

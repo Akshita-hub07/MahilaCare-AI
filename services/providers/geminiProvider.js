@@ -1,6 +1,6 @@
 /**
  * Concrete Gemini LLM Provider
- * Connects NariCare AI to Google Gemini REST API v1beta.
+ * Connects MahilaCare AI to Google Gemini REST API v1beta.
  */
 
 import { BaseLLMProvider } from './llmProvider.js';
@@ -37,10 +37,10 @@ export class GeminiProvider extends BaseLLMProvider {
     maxTokens = 2500
   }) {
     if (!this.apiKey) {
-      console.error('NariCare Provider: API key is missing.');
+      console.error('MahilaCare Provider: API key is missing.');
       return {
         error: true,
-        errorMessage: 'NariCare AI API key configuration is missing.'
+        errorMessage: 'MahilaCare AI API key configuration is missing.'
       };
     }
 
@@ -75,7 +75,7 @@ export class GeminiProvider extends BaseLLMProvider {
         return {
           error: true,
           status: 429,
-          errorMessage: 'NariCare AI is temporarily busy. Please try again shortly.'
+          errorMessage: 'MahilaCare AI is temporarily busy. Please try again shortly.'
         };
       }
 
@@ -92,7 +92,7 @@ export class GeminiProvider extends BaseLLMProvider {
 
     return lastErrorResult || {
       error: true,
-      errorMessage: 'NariCare AI is temporarily busy. Please try again shortly.'
+      errorMessage: 'MahilaCare AI is temporarily busy. Please try again shortly.'
     };
   }
 
@@ -182,14 +182,14 @@ export class GeminiProvider extends BaseLLMProvider {
         }
 
         console.error(`AI_REQUEST_END requestId=${requestId} status=${response.status} timestamp=${new Date().toISOString()}`);
-        console.error(`[NariCare AI Dev Diagnostic] Status: ${response.status}`, quotaDetails);
+        console.error(`[MahilaCare AI Dev Diagnostic] Status: ${response.status}`, quotaDetails);
 
-        let friendlyMessage = `NariCare AI is temporarily busy. Please try again shortly.`;
+        let friendlyMessage = `MahilaCare AI is temporarily busy. Please try again shortly.`;
 
         if (response.status === 429) {
-          friendlyMessage = `NariCare AI is temporarily busy. Please try again shortly.`;
+          friendlyMessage = `MahilaCare AI is temporarily busy. Please try again shortly.`;
         } else if (response.status === 401 || response.status === 403) {
-          friendlyMessage = `NariCare AI Service Authorization Error (${response.status}).`;
+          friendlyMessage = `MahilaCare AI Service Authorization Error (${response.status}).`;
         }
 
         return {
@@ -212,7 +212,7 @@ export class GeminiProvider extends BaseLLMProvider {
       if (!rawText) {
         return {
           error: true,
-          errorMessage: 'NariCare AI Service: Received empty response payload.',
+          errorMessage: 'MahilaCare AI Service: Received empty response payload.',
           status: 200
         };
       }
@@ -231,14 +231,14 @@ export class GeminiProvider extends BaseLLMProvider {
       if (error?.name === 'AbortError') {
         return {
           error: true,
-          errorMessage: 'NariCare AI Service: Request timed out (20s limit). Please check your connection.'
+          errorMessage: 'MahilaCare AI Service: Request timed out (20s limit). Please check your connection.'
         };
       }
 
-      console.error('NariCare Provider Exception:', error);
+      console.error('MahilaCare Provider Exception:', error);
       return {
         error: true,
-        errorMessage: 'NariCare AI Connection Error. Please try again shortly.'
+        errorMessage: 'MahilaCare AI Connection Error. Please try again shortly.'
       };
     }
   }
@@ -259,7 +259,7 @@ export class GeminiProvider extends BaseLLMProvider {
           action = parsed;
         }
       } catch (err) {
-        console.warn('NariCare Provider: Failed to parse action JSON:', err);
+        console.warn('MahilaCare Provider: Failed to parse action JSON:', err);
       }
     }
 

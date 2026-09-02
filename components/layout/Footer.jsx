@@ -18,7 +18,7 @@ const Footer = () => {
                 </div>
               </div>
               <span className="text-2xl font-extrabold text-white tracking-tight">
-                NariCare <span className="text-purple-400">AI</span>
+                MahilaCare <span className="text-purple-400">AI</span>
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
@@ -68,22 +68,22 @@ const Footer = () => {
             <div className="space-y-3 text-xs text-slate-400">
               <div className="flex items-center space-x-2.5">
                 <Mail className="w-4 h-4 text-purple-400 shrink-0" />
-                <span>support@naricare.ai</span>
+                <span>support@mahilacare.ai</span>
               </div>
               <div className="flex items-center space-x-2.5">
                 <Phone className="w-4 h-4 text-teal-400 shrink-0" />
-                <span>24/7 Helpline: 1800-NARI-CARE</span>
+                <span>24/7 Helpline: 1800-MAHILA-CARE</span>
               </div>
               <div className="flex items-start space-x-2.5">
                 <MapPin className="w-4 h-4 text-pink-400 shrink-0 mt-0.5" />
-                <span>NariCare Innovation Hub, HSR Layout, Bengaluru, Karnataka 560102</span>
+                <span>MahilaCare Innovation Hub, HSR Layout, Bengaluru, Karnataka 560102</span>
               </div>
             </div>
           </div>
         </div>
 
         <div className="pt-8 border-t border-slate-800 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} NariCare AI Technologies Private Limited. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} MahilaCare AI Technologies Private Limited. All rights reserved.</p>
           <div className="flex space-x-6 text-slate-400">
             <a href="#" className="hover:text-purple-300">Privacy</a>
             <a href="#" className="hover:text-purple-300">Terms</a>

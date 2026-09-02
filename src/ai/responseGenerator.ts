@@ -103,7 +103,7 @@ export class ResponseGenerator {
         parts.push(`नमस्ते ${context.userName}! नारीकेयर AI आपके स्वास्थ्य प्रश्न ("${prompt.slice(0, 40)}...") का विश्लेषण कर रहा है।`);
         parts.push(`1. पर्याप्त जल सेवन (2.5L प्रतिदिन) और संतुलित आहार लें।\n2. यदि लक्षण बने रहें, तो हमारे ऐप द्वारा महिला डॉक्टर परामर्श बुक करें।`);
       } else {
-        parts.push(`Hello ${context.userName}! NariCare AI 🌸 has processed your query regarding "${prompt.slice(0, 45)}...".`);
+        parts.push(`Hello ${context.userName}! MahilaCare AI 🌸 has processed your query regarding "${prompt.slice(0, 45)}...".`);
         parts.push(`1. **Holistic Care**: Ensure hydration (2.5L daily), balanced nutrition, and adequate rest.\n2. **Platform Navigation**: You can ask me to find female doctors nearby, analyze lab reports, or check cycle insights.`);
       }
     }

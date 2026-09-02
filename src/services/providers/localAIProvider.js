@@ -1,7 +1,7 @@
 /**
- * NariCare AI - Ollama Cloud AI Provider
+ * MahilaCare AI - Ollama Cloud AI Provider
  *
- * Connects NariCare AI to Ollama Cloud API endpoint:
+ * Connects MahilaCare AI to Ollama Cloud API endpoint:
  * https://ollama.com/v1/chat/completions or https://ollama.com/api/chat
  *
  * Environment Variables (configurable):
@@ -34,7 +34,7 @@ export class LocalAIProvider extends BaseLLMProvider {
     const processEnv = typeof process !== 'undefined' && process.env ? process.env : {};
     this.apiKey = config.apiKey || metaEnv.VITE_OLLAMA_CLOUD_API_KEY || metaEnv.OLLAMA_API_KEY || processEnv.OLLAMA_API_KEY || processEnv.VITE_OLLAMA_CLOUD_API_KEY || '';
 
-    this.name = "NariCare AI Engine";
+    this.name = "MahilaCare AI Engine";
   }
 
   /**
@@ -86,7 +86,7 @@ export class LocalAIProvider extends BaseLLMProvider {
     const primaryEndpoint = origin ? `${origin}/api/chat` : '/api/chat';
     const requestId = `req_cloud_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-    console.log(`[NariCare AI Engine] START requestId=${requestId} model=${this.model} endpoint=${primaryEndpoint}`);
+    console.log(`[MahilaCare AI Engine] START requestId=${requestId} model=${this.model} endpoint=${primaryEndpoint}`);
 
     const headers = {
       'Content-Type': 'application/json'
@@ -121,7 +121,7 @@ export class LocalAIProvider extends BaseLLMProvider {
             signal: controller.signal
           });
         } catch (primaryErr) {
-          console.warn('[NariCare AI Engine] Serverless /api/chat fetch failed, trying direct endpoint...', primaryErr);
+          console.warn('[MahilaCare AI Engine] Serverless /api/chat fetch failed, trying direct endpoint...', primaryErr);
         }
       }
 
@@ -130,7 +130,7 @@ export class LocalAIProvider extends BaseLLMProvider {
       // Attempt 2: Direct Ollama Cloud Endpoint Fallback
       if (!response || !response.ok) {
         const cloudFallbackEndpoint = `${this.baseUrl}/v1/chat/completions`;
-        console.warn(`[NariCare AI Engine] Serverless /api/chat status=${response?.status || 'network_error'}, trying direct Ollama Cloud endpoint: ${cloudFallbackEndpoint}`);
+        console.warn(`[MahilaCare AI Engine] Serverless /api/chat status=${response?.status || 'network_error'}, trying direct Ollama Cloud endpoint: ${cloudFallbackEndpoint}`);
         usedEndpoint = cloudFallbackEndpoint;
 
         try {
@@ -144,7 +144,7 @@ export class LocalAIProvider extends BaseLLMProvider {
           });
           clearTimeout(fallbackTimeout);
         } catch (fallbackErr) {
-          console.warn('[NariCare AI Engine] Direct Cloud endpoint fetch error:', fallbackErr.message);
+          console.warn('[MahilaCare AI Engine] Direct Cloud endpoint fetch error:', fallbackErr.message);
         }
       }
 
@@ -171,7 +171,7 @@ export class LocalAIProvider extends BaseLLMProvider {
           });
           clearTimeout(nativeTimeout);
         } catch (nativeErr) {
-          console.warn('[NariCare AI Engine] Native Cloud endpoint fetch error:', nativeErr.message);
+          console.warn('[MahilaCare AI Engine] Native Cloud endpoint fetch error:', nativeErr.message);
         }
       }
 
@@ -179,12 +179,12 @@ export class LocalAIProvider extends BaseLLMProvider {
       if (!response || response.status === 401 || response.status === 403 || !response.ok) {
         const cloudStatus = response?.status;
         const errorText = response ? await response.text().catch(() => '') : '';
-        console.error(`[NariCare AI Engine DIAGNOSTIC] Serverless/Cloud Status: ${cloudStatus || 'FAILED'} | Endpoint: ${usedEndpoint} | Details: ${errorText || 'No response'}`);
+        console.error(`[MahilaCare AI Engine DIAGNOSTIC] Serverless/Cloud Status: ${cloudStatus || 'FAILED'} | Endpoint: ${usedEndpoint} | Details: ${errorText || 'No response'}`);
 
         // Try local Ollama server if running on port 11434
         const localFallbackEndpoint = 'http://localhost:11434/api/chat';
         try {
-          console.log(`[NariCare AI Engine] Attempting local Qwen fallback engine at ${localFallbackEndpoint}...`);
+          console.log(`[MahilaCare AI Engine] Attempting local Qwen fallback engine at ${localFallbackEndpoint}...`);
           const localRes = await fetch(localFallbackEndpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -201,30 +201,30 @@ export class LocalAIProvider extends BaseLLMProvider {
             usedEndpoint = localFallbackEndpoint;
           }
         } catch (localErr) {
-          console.warn('[NariCare AI Engine] Local fallback engine not available:', localErr.message);
+          console.warn('[MahilaCare AI Engine] Local fallback engine not available:', localErr.message);
         }
       }
 
       if (!response || !response.ok) {
         const finalErrorText = response ? await response.text().catch(() => '') : 'No response';
-        console.error(`[NariCare AI Engine FINAL ERROR] HTTP error status=${response?.status} endpoint=${usedEndpoint} body=${finalErrorText}`);
+        console.error(`[MahilaCare AI Engine FINAL ERROR] HTTP error status=${response?.status} endpoint=${usedEndpoint} body=${finalErrorText}`);
         return {
           error: true,
-          errorMessage: 'NariCare AI is temporarily unavailable. Please try again shortly.',
+          errorMessage: 'MahilaCare AI is temporarily unavailable. Please try again shortly.',
           status: response?.status
         };
       }
 
       const data = await response.json();
-      console.log(`[NariCare AI Engine] END requestId=${requestId} status=200 endpoint=${usedEndpoint}`);
+      console.log(`[MahilaCare AI Engine] END requestId=${requestId} status=200 endpoint=${usedEndpoint}`);
 
       const rawText = data?.choices?.[0]?.message?.content?.trim() || data?.message?.content?.trim() || (typeof data?.response === 'string' ? data.response.trim() : (typeof data?.text === 'string' ? data.text.trim() : null));
 
       if (!rawText) {
-        console.error(`[NariCare AI Engine] Received empty response content.`);
+        console.error(`[MahilaCare AI Engine] Received empty response content.`);
         return {
           error: true,
-          errorMessage: 'NariCare AI is temporarily unavailable. Please try again shortly.',
+          errorMessage: 'MahilaCare AI is temporarily unavailable. Please try again shortly.',
           status: 200
         };
       }
@@ -236,22 +236,22 @@ export class LocalAIProvider extends BaseLLMProvider {
         text,
         action,
         rawText,
-        modelUsed: "NariCare AI Engine" // Clean user-facing branding
+        modelUsed: "MahilaCare AI Engine" // Clean user-facing branding
       };
 
     } catch (error) {
       if (error?.name === 'AbortError') {
-        console.error('[NariCare AI Engine] Request timeout.');
+        console.error('[MahilaCare AI Engine] Request timeout.');
         return {
           error: true,
-          errorMessage: 'NariCare AI is temporarily unavailable. Please try again shortly.'
+          errorMessage: 'MahilaCare AI is temporarily unavailable. Please try again shortly.'
         };
       }
 
-      console.error('[NariCare AI Engine Exception]:', error);
+      console.error('[MahilaCare AI Engine Exception]:', error);
       return {
         error: true,
-        errorMessage: 'NariCare AI is temporarily unavailable. Please try again shortly.'
+        errorMessage: 'MahilaCare AI is temporarily unavailable. Please try again shortly.'
       };
     }
   }
@@ -272,7 +272,7 @@ export class LocalAIProvider extends BaseLLMProvider {
           action = parsed;
         }
       } catch (err) {
-        console.warn('NariCare AI Engine: Failed to parse action JSON:', err);
+        console.warn('MahilaCare AI Engine: Failed to parse action JSON:', err);
       }
     }
 

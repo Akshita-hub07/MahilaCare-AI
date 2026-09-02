@@ -51,7 +51,7 @@ const SignupPage = () => {
               </div>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              {t('auth.createAccount', 'Create Your NariCare Account')}
+              {t('auth.createAccount', 'Create Your MahilaCare Account')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
               {t('auth.signupSub', 'Join thousands of women managing their health with intelligent AI')}

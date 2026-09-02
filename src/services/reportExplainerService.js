@@ -66,7 +66,7 @@ function generateClinicalFallbackSummary(reportTitle = '', rawContent = '', full
       ],
       nextSteps: [
         "Continue routine wellness habits and hydration.",
-        "Log health parameters in your NariCare Digital Vault."
+        "Log health parameters in your MahilaCare Digital Vault."
       ],
       whenToSeekCare: "Consult a clinician if you experience excessive thirst, frequent urination, or unexplained weight loss."
     };
@@ -76,8 +76,8 @@ function generateClinicalFallbackSummary(reportTitle = '', rawContent = '', full
   const sampleFindings = lines.slice(0, 4).map(l => `Parameter / Note: ${l}`);
 
   return {
-    summary: `NariCare AI analyzed the report parameters for "${reportTitle || 'Medical Report'}". The recorded values have been parsed and structured for clinical review. All key parameters have been logged in your Digital Health Vault.`,
-    keyFindings: sampleFindings.length > 0 ? sampleFindings : ["Report parameters parsed by NariCare AI."],
+    summary: `MahilaCare AI analyzed the report parameters for "${reportTitle || 'Medical Report'}". The recorded values have been parsed and structured for clinical review. All key parameters have been logged in your Digital Health Vault.`,
+    keyFindings: sampleFindings.length > 0 ? sampleFindings : ["Report parameters parsed by MahilaCare AI."],
     plainExplanation: `This report contains medical test parameters and notes for ${reportTitle || 'your record'}. Review these results with your healthcare provider during your consultation.`,
     generalPrecautions: [
       "Keep original physical or digital laboratory reports stored safely.",
@@ -85,7 +85,7 @@ function generateClinicalFallbackSummary(reportTitle = '', rawContent = '', full
     ],
     nextSteps: [
       "Discuss report findings with a verified female gynecologist or physician.",
-      "Save record in your NariCare Health Timeline."
+      "Save record in your MahilaCare Health Timeline."
     ],
     whenToSeekCare: "Seek prompt medical care if experiencing severe discomfort, high fever, or unexpected symptoms."
   };
@@ -116,18 +116,18 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
         unextractableContent: true,
         reportTitle: reportTitle || "Medical Record / Lab Report",
         overallStatus: "Content Unextractable",
-        summary: "This file has been securely stored in your NariCare Health Vault. However, text extraction is not available for this binary file type without OCR. NariCare AI will not generate an interpretation from missing content.",
+        summary: "This file has been securely stored in your MahilaCare Health Vault. However, text extraction is not available for this binary file type without OCR. MahilaCare AI will not generate an interpretation from missing content.",
         keyFindings: ["Document file stored in vault"],
         extractedValues: [],
         plainExplanation: "To get an AI analysis for this report, please re-upload or enter the test parameters and text summary directly.",
         generalPrecautions: ["Always keep physical or original digital copies of your official medical reports."],
         nextSteps: [
-          "Store original file safely in your NariCare Vault.",
+          "Store original file safely in your MahilaCare Vault.",
           "Optionally enter text results to generate AI breakdown."
         ],
         whenToSeekCare: "Consult a healthcare professional for clinical evaluation of your original medical documents.",
         suggestsFollowup: false,
-        disclaimer: "⚠️ NariCare AI requires readable report text parameters to perform analysis."
+        disclaimer: "⚠️ MahilaCare AI requires readable report text parameters to perform analysis."
       };
     }
 
@@ -158,7 +158,7 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
         nextSteps: fallback.nextSteps,
         whenToSeekCare: fallback.whenToSeekCare,
         suggestsFollowup: true,
-        disclaimer: "⚠️ NariCare AI provides health education based on reported lab data, not medical diagnosis."
+        disclaimer: "⚠️ MahilaCare AI provides health education based on reported lab data, not medical diagnosis."
       };
     }
 
@@ -174,11 +174,11 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
         ? aiReport.nextSteps.slice(0, 3)
         : [
             "Discuss report findings with a verified clinician during your next visit.",
-            "Save record in your NariCare Health Timeline."
+            "Save record in your MahilaCare Health Timeline."
           ],
       whenToSeekCare: aiReport.whenToSeekCare || "Seek prompt medical care if experiencing severe symptoms or high fever.",
       suggestsFollowup: !!aiReport.suggestsFollowup,
-      disclaimer: aiReport.disclaimer || "⚠️ NariCare AI provides health education, not medical diagnosis."
+      disclaimer: aiReport.disclaimer || "⚠️ MahilaCare AI provides health education, not medical diagnosis."
     };
   } catch (err) {
     console.error("Report Analysis Error:", err);
@@ -194,7 +194,7 @@ export const analyzeMedicalReport = async (reportTitle, rawText, langCode = 'en'
       nextSteps: fallback.nextSteps,
       whenToSeekCare: fallback.whenToSeekCare,
       suggestsFollowup: true,
-      disclaimer: "⚠️ NariCare AI provides health education, not medical diagnosis."
+      disclaimer: "⚠️ MahilaCare AI provides health education, not medical diagnosis."
     };
   }
 };

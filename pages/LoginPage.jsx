@@ -45,7 +45,7 @@ const LoginPage = () => {
               {t('auth.welcomeBack', 'Welcome Back')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              {t('auth.signinSub', 'Sign in to access your personalized NariCare AI dashboard')}
+              {t('auth.signinSub', 'Sign in to access your personalized MahilaCare AI dashboard')}
             </p>
           </div>
 

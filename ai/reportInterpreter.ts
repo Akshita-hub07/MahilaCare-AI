@@ -88,7 +88,7 @@ export class ReportInterpreter {
     }
 
     const hasAbnormalValues = biomarkers.some(b => b.status === 'LOW' || b.status === 'HIGH');
-    const summary = `Report "${reportTitle}" parameters processed. Send to NariCare Local AI Engine (Ollama) for full plain-language breakdown.`;
+    const summary = `Report "${reportTitle}" parameters processed. Send to MahilaCare Local AI Engine (Ollama) for full plain-language breakdown.`;
 
     return {
       reportTitle: reportTitle || "Medical Record Analysis",
@@ -102,7 +102,7 @@ export class ReportInterpreter {
         "Discuss test findings with a verified female gynecologist or primary physician for clinical evaluation."
       ] : [
         "Maintain current healthy nutrition and active lifestyle habits.",
-        "Store original record safely in your NariCare digital health vault."
+        "Store original record safely in your MahilaCare digital health vault."
       ],
       isDoctorConsultRecommended: hasAbnormalValues
     };

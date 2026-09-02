@@ -15,7 +15,7 @@ export const LANGUAGES = [
 
 const translations = {
   en: {
-    appName: "NariCare AI",
+    appName: "MahilaCare AI",
     tagline: "Your AI-Powered Women's Healthcare Companion",
     heroDescription: "Empowering women with safe, personalized and accessible healthcare through AI.",
     login: "Login",
@@ -23,7 +23,7 @@ const translations = {
     learnMore: "Learn More",
     logout: "Logout",
     selectLanguage: "Select Preferred Language",
-    welcomeTitle: "Welcome to NariCare AI",
+    welcomeTitle: "Welcome to MahilaCare AI",
     welcomeSubtitle: "Choose your primary language to personalize your healthcare journey.",
     navDashboard: "Dashboard",
     navNearby: "Find Healthcare",
@@ -33,6 +33,7 @@ const translations = {
     navMenstrual: "Menstrual Care",
     navPregnancy: "Pregnancy",
     navEducation: "Education",
+    navTransport: "Transport Assistance",
     navProfile: "Profile & Settings",
     goodMorning: "Good Morning",
     goodAfternoon: "Good Afternoon",
@@ -60,10 +61,10 @@ const translations = {
       connectGynaecologists: "Connect with top gynecologists near you",
       careEngineTitle: "Comprehensive Care Engine",
       careEngineHeading: "Everything Every Woman Needs for Complete Health & Care",
-      careEngineSub: "From monthly cycle tracking to emergency hospital care and AI symptom diagnosis, NariCare AI is built for every stage of a woman's life.",
+      careEngineSub: "From monthly cycle tracking to emergency hospital care and AI symptom diagnosis, MahilaCare AI is built for every stage of a woman's life.",
       exploreFeature: "Explore Feature",
       motherTongueTitle: "Healthcare in Your Mother Tongue",
-      motherTongueSub: "No language barriers. Use NariCare AI effortlessly in English, Hindi, Hinglish, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, or Malayalam."
+      motherTongueSub: "No language barriers. Use MahilaCare AI effortlessly in English, Hindi, Hinglish, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, or Malayalam."
     },
     featureCards: {
       aiNavTitle: "AI Health Navigator",
@@ -99,10 +100,12 @@ const translations = {
       education: "AI Health Education",
       educationSub: "Multilingual health articles, myth-busters & podcasts",
       profile: "Profile & Settings",
-      profileSub: "Language, permissions, emergency contacts & preferences"
+      profileSub: "Language, permissions, emergency contacts & preferences",
+      transport: "Transport Assistance",
+      transportSub: "Compare Uber, Ola, Rapido & emergency medical rides"
     },
     chatbot: {
-      title: "Nari AI Assistant",
+      title: "Mahila AI Assistant",
       subtitle: "Ask me anything about women's health, symptoms, or remedies",
       placeholder: "Ask Nari anything about your health...",
       speaking: "Nari is speaking...",
@@ -135,7 +138,7 @@ const translations = {
       currentPhase: "Current Phase",
       fertileWindow: "Fertile Window",
       logSymptoms: "Log Today's Symptoms",
-      aiInsight: "Nari AI Cycle Summary"
+      aiInsight: "Mahila AI Cycle Summary"
     },
     pregnancyPage: {
       title: "Pregnancy Companion & Fetal Tracker",
@@ -179,9 +182,9 @@ const translations = {
       saveChanges: "Save Profile Preferences"
     },
     auth: {
-      welcomeBack: "Welcome Back to NariCare",
-      signinSub: "Sign in to access your personalized NariCare AI dashboard",
-      createAccount: "Create Your NariCare Account",
+      welcomeBack: "Welcome Back to MahilaCare",
+      signinSub: "Sign in to access your personalized MahilaCare AI dashboard",
+      createAccount: "Create Your MahilaCare Account",
       signupSub: "Join thousands of women managing their health with intelligent AI",
       email: "Email Address",
       password: "Password",
@@ -189,7 +192,7 @@ const translations = {
       age: "Age",
       phone: "Phone Number",
       rememberMe: "Remember me",
-      agreeTerms: "I agree to NariCare Terms & Privacy Policy",
+      agreeTerms: "I agree to MahilaCare Terms & Privacy Policy",
       alreadyAccount: "Already have an account? Login",
       needAccount: "Don't have an account? Sign Up"
     },
@@ -198,7 +201,7 @@ const translations = {
       step1Title: "Personal Profile",
       step2Title: "Health Preferences",
       step3Title: "Emergency & Language Settings",
-      getStarted: "Get Started with NariCare"
+      getStarted: "Get Started with MahilaCare"
     },
     permissionsPage: {
       title: "Permissions & Privacy Controls",
@@ -407,7 +410,7 @@ const translations = {
     }
   },
   hinglish: {
-    appName: "NariCare AI",
+    appName: "MahilaCare AI",
     tagline: "Aapka AI-Powered Women's Healthcare Companion",
     heroDescription: "AI ke saath mahilaon ko safe, personalized aur accessible healthcare pradan karna.",
     login: "Login",
@@ -415,7 +418,7 @@ const translations = {
     learnMore: "Aur Janein",
     logout: "Logout",
     selectLanguage: "Apni Preferred Language Chunein",
-    welcomeTitle: "NariCare AI mein Aapka Swagat Hai",
+    welcomeTitle: "MahilaCare AI mein Aapka Swagat Hai",
     welcomeSubtitle: "Apni healthcare journey ko personalize karne ke liye language select karein.",
     navDashboard: "Dashboard",
     navNearby: "Doctors Khojein",
@@ -452,10 +455,10 @@ const translations = {
       connectGynaecologists: "Apne paas ke top gynecologists se connect karein",
       careEngineTitle: "Comprehensive Care Engine",
       careEngineHeading: "Har Mahila Ke Complete Health & Care Ke Liye Sab Kuch",
-      careEngineSub: "Monthly period tracking se lekar emergency hospital care aur AI symptom diagnosis tak, NariCare AI har stage ke liye ready hai.",
+      careEngineSub: "Monthly period tracking se lekar emergency hospital care aur AI symptom diagnosis tak, MahilaCare AI har stage ke liye ready hai.",
       exploreFeature: "Feature Explore Karein",
       motherTongueTitle: "Apni Matrubhasha Mein Healthcare",
-      motherTongueSub: "Koi language barrier nahi. English, Hindi, Hinglish, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada ya Malayalam mein NariCare AI use karein."
+      motherTongueSub: "Koi language barrier nahi. English, Hindi, Hinglish, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada ya Malayalam mein MahilaCare AI use karein."
     },
     featureCards: {
       aiNavTitle: "AI Health Navigator",
@@ -494,7 +497,7 @@ const translations = {
       profileSub: "Language, permissions, emergency contacts & preferences"
     },
     chatbot: {
-      title: "Nari AI Assistant",
+      title: "Mahila AI Assistant",
       subtitle: "Women's health, symptoms ya care ke baare mein kuch bhi poochein",
       placeholder: "Nari se apni health ke baare mein kuch bhi poochein...",
       speaking: "Nari bol rahi hai...",
@@ -519,7 +522,7 @@ const translations = {
       currentPhase: "Current Phase",
       fertileWindow: "Fertile Window",
       logSymptoms: "Aaj Ke Symptoms Log Karein",
-      aiInsight: "Nari AI Cycle Summary"
+      aiInsight: "Mahila AI Cycle Summary"
     },
     pregnancyPage: {
       title: "Pregnancy Companion & Fetal Tracker",
@@ -563,9 +566,9 @@ const translations = {
       saveChanges: "Preferences Save Karein"
     },
     auth: {
-      welcomeBack: "NariCare Mein Phir Se Swagat Hai",
-      signinSub: "Apne personalized NariCare AI dashboard par jane ke liye sign in karein",
-      createAccount: "Apna NariCare Account Banayein",
+      welcomeBack: "MahilaCare Mein Phir Se Swagat Hai",
+      signinSub: "Apne personalized MahilaCare AI dashboard par jane ke liye sign in karein",
+      createAccount: "Apna MahilaCare Account Banayein",
       signupSub: "AI ke saath apni health manage karne wali hazaaron mahilaon se judein",
       email: "Email Address",
       password: "Password",
@@ -573,7 +576,7 @@ const translations = {
       age: "Age",
       phone: "Phone Number",
       rememberMe: "Mujhe yaad rakhein",
-      agreeTerms: "Main NariCare Terms & Privacy Policy se agree karta/karti hoon",
+      agreeTerms: "Main MahilaCare Terms & Privacy Policy se agree karta/karti hoon",
       alreadyAccount: "Pehle se account hai? Login karein",
       needAccount: "Account nahi hai? Sign Up karein"
     },
@@ -582,7 +585,7 @@ const translations = {
       step1Title: "Personal Profile",
       step2Title: "Health Preferences",
       step3Title: "Emergency & Language Settings",
-      getStarted: "NariCare Start Karein"
+      getStarted: "MahilaCare Start Karein"
     },
     permissionsPage: {
       title: "Permissions & Privacy Controls",

@@ -65,7 +65,7 @@ const AIOnboardingPage = () => {
             </div>
             <div>
               <h3 className="font-extrabold text-slate-900 text-base flex items-center gap-1.5">
-                Nari AI Assistant
+                Mahila AI Assistant
                 <Sparkles className="w-4 h-4 text-purple-600 fill-purple-600" />
               </h3>
               <p className="text-xs text-purple-900 font-medium">
@@ -213,7 +213,7 @@ const AIOnboardingPage = () => {
                   <Stethoscope className="w-5 h-5 text-purple-600" />
                   Existing Medical Conditions (Optional)
                 </h3>
-                <p className="text-xs text-slate-500">Select any pre-existing conditions so Nari AI can tune health reminders and dietary advice.</p>
+                <p className="text-xs text-slate-500">Select any pre-existing conditions so Mahila AI can tune health reminders and dietary advice.</p>
               </div>
 
               <div className="flex flex-wrap gap-2.5">
@@ -248,7 +248,7 @@ const AIOnboardingPage = () => {
                   Your Healthcare Profile is Ready!
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">
-                  Nari AI has customized your dashboard with your language preference, search radius, and wellness parameters.
+                  Mahila AI has customized your dashboard with your language preference, search radius, and wellness parameters.
                 </p>
               </div>
 

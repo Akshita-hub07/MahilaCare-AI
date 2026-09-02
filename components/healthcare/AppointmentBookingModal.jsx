@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar as CalendarIcon, Clock, CheckCircle2, Navigation, Car, AlertCircle, FileText, Share2, Plus } from 'lucide-react';
+import { X, Calendar as CalendarIcon, Clock, CheckCircle2, Navigation, Car, AlertCircle, FileText, Share2, Trash2 } from 'lucide-react';
 import { createAppointmentBooking } from '../../services/hospitalBookingApi';
 import { googleCalendarService, googleMapsService } from '../../services/googleServices';
 import { useHealthData } from '../../context/HealthDataContext';
@@ -16,6 +16,7 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [cancelNotice, setCancelNotice] = useState(false);
 
   useEffect(() => {
     if (initialNotes && initialNotes.trim()) {
@@ -28,6 +29,7 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
   const handleConfirm = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setCancelNotice(false);
 
     const result = await createAppointmentBooking({
       hospitalName: hospital?.name || 'Apollo Women Healthcare',
@@ -51,6 +53,14 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
     });
   };
 
+  const handleCancelAppointment = () => {
+    setConfirmedBooking(null);
+    setCancelNotice(true);
+    setTimeout(() => {
+      setCancelNotice(false);
+    }, 4000);
+  };
+
   const handleAddToCalendar = async () => {
     if (!confirmedBooking) return;
     const res = await googleCalendarService.addAppointmentToCalendar({
@@ -70,6 +80,18 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
         >
           <X className="w-5 h-5" />
         </button>
+
+        {cancelNotice && (
+          <div className="mb-4 bg-rose-50 border border-rose-200 text-rose-800 p-3 rounded-2xl text-xs font-bold flex items-center justify-between animate-fade-in">
+            <span className="flex items-center gap-1.5">
+              <Trash2 className="w-4 h-4 text-rose-600" />
+              <span>Appointment Cancelled Successfully</span>
+            </span>
+            <button onClick={() => setCancelNotice(false)} className="text-rose-500 hover:text-rose-700">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         {!confirmedBooking ? (
           /* STEP 1: Booking Form */
@@ -101,25 +123,24 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
                 </select>
               </div>
 
-              {/* Date & Time Slot */}
+              {/* Date & Time Slot Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Select Preferred Date</label>
                   <input
                     type="date"
-                    required
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full p-3 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-900 font-medium"
+                    className="w-full p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-900 focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Select Time Slot</label>
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Time Slot</label>
                   <select
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
-                    className="w-full p-3 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-900"
+                    className="w-full p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm font-semibold text-slate-900 focus:outline-none"
                   >
                     {TIME_SLOTS.map((slot) => (
                       <option key={slot} value={slot}>{slot}</option>
@@ -128,89 +149,73 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
                 </div>
               </div>
 
-              {/* Patient Notes */}
+              {/* Reason / Patient Notes */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Patient Symptoms / Notes</label>
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">Reason for Visit / Triage Notes</label>
                 <textarea
-                  rows="3"
+                  rows={2}
                   value={patientNotes}
                   onChange={(e) => setPatientNotes(e.target.value)}
-                  placeholder="Describe any ongoing symptoms or medical history..."
-                  className="w-full p-3 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-900 focus:outline-none"
+                  className="w-full p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-900 focus:outline-none"
+                  placeholder="Describe your health concern..."
                 ></textarea>
               </div>
 
               {/* Fee Breakdown */}
-              <div className="bg-purple-50 p-4 rounded-2xl flex items-center justify-between text-xs text-purple-900 border border-purple-100">
-                <span>Estimated Consultation Fee:</span>
-                <span className="text-base font-black text-purple-900">₹{hospital?.consultFee || 800}</span>
+              <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100 flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-purple-700 font-bold block">Consultation Fee</span>
+                  <span className="text-[10px] text-purple-600">Payable at clinic or online</span>
+                </div>
+                <span className="text-xl font-black text-purple-900">₹{hospital?.consultFee || 800}</span>
               </div>
 
-              <div className="pt-2">
+              {/* Submit & Cancel Actions */}
+              <div className="pt-2 flex items-center gap-3">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-violet-600 to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-purple-500/20 hover:opacity-95 transition-all"
+                  className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-purple-600 to-teal-500 text-white font-extrabold text-sm shadow-lg shadow-purple-500/20 hover:opacity-95 transition-all flex items-center justify-center space-x-2"
                 >
-                  {isSubmitting ? 'Confirming Appointment...' : 'Confirm OPD Appointment'}
+                  {isSubmitting ? 'Confirming OPD Appointment...' : 'Confirm Appointment'}
                 </button>
               </div>
             </form>
           </div>
         ) : (
-          /* STEP 2: Confirmed Receipt Screen */
-          <div className="space-y-6 animate-fade-in text-slate-800">
-            <div className="text-center space-y-2">
-              <div className="w-16 h-16 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center mx-auto shadow-inner">
-                <CheckCircle2 className="w-10 h-10" />
-              </div>
-              <h3 className="text-2xl font-black text-slate-900">Appointment Confirmed!</h3>
-              <p className="text-xs font-bold text-teal-700">Booking ID: {confirmedBooking.appointmentId}</p>
+          /* STEP 2: Confirmed Booking Details & Cancel Appointment Option */
+          <div className="space-y-6 text-center animate-fade-in">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
+              <CheckCircle2 className="w-10 h-10" />
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-3 text-xs">
-              <div className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500 font-semibold">Doctor / Specialist:</span>
-                <span className="font-bold text-slate-900">{confirmedBooking.doctor}</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500 font-semibold">Hospital / Center:</span>
-                <span className="font-bold text-slate-900">{confirmedBooking.hospital}</span>
-              </div>
-              <div className="flex justify-between border-b border-slate-200 pb-2">
-                <span className="text-slate-500 font-semibold">Date & Time:</span>
-                <span className="font-bold text-purple-700">{confirmedBooking.date} at {confirmedBooking.time}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500 font-semibold">Estimated Fee:</span>
-                <span className="font-bold text-slate-900">{confirmedBooking.estimatedCost}</span>
-              </div>
+            <div>
+              <span className="text-xs font-extrabold text-emerald-600 uppercase tracking-wider">
+                Appointment Booking Confirmed
+              </span>
+              <h3 className="text-2xl font-black text-slate-900 mt-1">
+                ID: {confirmedBooking.appointmentId}
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Saved to your MahilaCare AI Health Timeline
+              </p>
             </div>
 
-            {/* Documents Checklist */}
-            <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100 space-y-2">
-              <h4 className="text-xs font-extrabold uppercase text-purple-900 flex items-center gap-1.5">
-                <FileText className="w-4 h-4 text-purple-700" />
-                Required Documents Checklist:
-              </h4>
-              <ul className="text-xs text-purple-950 space-y-1">
-                {confirmedBooking.documentsRequired.map((doc, idx) => (
-                  <li key={idx} className="flex items-center space-x-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
-                    <span>{doc}</span>
-                  </li>
-                ))}
-              </ul>
+            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left space-y-2 text-xs">
+              <p><strong>Doctor:</strong> {confirmedBooking.doctorName}</p>
+              <p><strong>Hospital:</strong> {confirmedBooking.hospital}</p>
+              <p><strong>Schedule:</strong> {confirmedBooking.date} at {confirmedBooking.time}</p>
+              <p><strong>Consult Fee:</strong> {confirmedBooking.consultFee}</p>
             </div>
 
-            {/* Confirmation Buttons */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            {/* Actions: Add to Calendar, Trigger Transport, and CANCEL APPOINTMENT */}
+            <div className="space-y-2.5 pt-2">
               <button
                 onClick={handleAddToCalendar}
-                className="py-3 rounded-2xl bg-purple-600 text-white font-bold text-xs shadow-md hover:bg-purple-700 transition-colors flex items-center justify-center space-x-1.5"
+                className="w-full py-3.5 rounded-2xl bg-purple-600 text-white font-extrabold text-xs shadow-md hover:bg-purple-700 transition-all flex items-center justify-center space-x-2"
               >
-                <Plus className="w-4 h-4" />
-                <span>Add to Google Calendar</span>
+                <CalendarIcon className="w-4 h-4" />
+                <span>Add Appointment to Google Calendar</span>
               </button>
 
               <button
@@ -218,23 +223,20 @@ const AppointmentBookingModal = ({ isOpen, onClose, hospital, onTriggerTransport
                   onClose();
                   if (onTriggerTransport) onTriggerTransport(hospital);
                 }}
-                className="py-3 rounded-2xl bg-teal-600 text-white font-bold text-xs shadow-md hover:bg-teal-700 transition-colors flex items-center justify-center space-x-1.5"
+                className="w-full py-3.5 rounded-2xl bg-teal-50 hover:bg-teal-100 text-teal-800 font-extrabold text-xs border border-teal-200 transition-all flex items-center justify-center space-x-2"
               >
-                <Car className="w-4 h-4" />
-                <span>Transport Assistance</span>
+                <Car className="w-4 h-4 text-teal-600" />
+                <span>Book Ride to Hospital</span>
               </button>
-            </div>
 
-            <div className="flex justify-between text-xs font-semibold pt-2">
-              <a
-                href={googleMapsService.getNavigationUrl(hospital?.address || 'Apollo Hospital')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-purple-600 hover:underline flex items-center gap-1"
+              {/* CANCEL APPOINTMENT BUTTON */}
+              <button
+                onClick={handleCancelAppointment}
+                className="w-full py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs border border-rose-200 transition-all flex items-center justify-center space-x-2"
               >
-                <Navigation className="w-3.5 h-3.5" /> Navigate on Google Maps
-              </a>
-              <button onClick={onClose} className="text-slate-400 hover:text-slate-700">Close Receipt</button>
+                <Trash2 className="w-4 h-4 text-rose-600" />
+                <span>Cancel Appointment</span>
+              </button>
             </div>
           </div>
         )}

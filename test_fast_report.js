@@ -22,7 +22,7 @@ Return JSON with this schema:
   "suggestsFollowup": true
 }
 \`\`\``,
-    systemInstruction: `You are NariCare AI, a concise conversational health assistant. Return grounded JSON response.`,
+    systemInstruction: `You are MahilaCare AI, a concise conversational health assistant. Return grounded JSON response.`,
     maxTokens: 350,
     temperature: 0.2
   });

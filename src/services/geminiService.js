@@ -1,5 +1,5 @@
 /**
- * Central AI Bridge connecting NariCare AI components to llmService.js and conversationMemory
+ * Central AI Bridge connecting MahilaCare AI components to llmService.js and conversationMemory
  */
 
 import { llmService } from './llmService.js';
@@ -58,7 +58,7 @@ class GeminiAIService {
       return {
         error: true,
         text: `⚠️ ${result.errorMessage || 'AI Service Temporarily Unavailable. Please check your network connection.'}`,
-        disclaimer: "⚠️ NariCare AI Service Temporarily Unavailable."
+        disclaimer: "⚠️ MahilaCare AI Service Temporarily Unavailable."
       };
     }
 
@@ -74,7 +74,7 @@ class GeminiAIService {
     return {
       error: false,
       text: result.text,
-      disclaimer: "⚠️ NariCare AI provides general health education based on verified medical standards, but does not replace professional clinical evaluation.",
+      disclaimer: "⚠️ MahilaCare AI provides general health education based on verified medical standards, but does not replace professional clinical evaluation.",
       intentAction: result.action,
       modelUsed: result.modelUsed
     };
@@ -209,19 +209,19 @@ ${schemaTemplate}
     if (response.error) {
       return {
         error: true,
-        summary: response.errorMessage || 'NariCare AI is temporarily unavailable. Please try again shortly.',
+        summary: response.errorMessage || 'MahilaCare AI is temporarily unavailable. Please try again shortly.',
         keyFindings: [],
         extractedValues: [],
         recommendedProducts: [],
-        plainExplanation: response.errorMessage || 'NariCare AI is temporarily unavailable.',
+        plainExplanation: response.errorMessage || 'MahilaCare AI is temporarily unavailable.',
         generalPrecautions: ["Maintain routine hydration and nutritional intake."],
         nextSteps: [
           "Discuss report findings with a verified female gynecologist or physician.",
-          "Save report in your NariCare Health Timeline."
+          "Save report in your MahilaCare Health Timeline."
         ],
         whenToSeekCare: "Seek prompt clinical care if you experience severe symptoms, high fever, or sharp abdominal pain.",
         suggestsFollowup: false,
-        disclaimer: "⚠️ NariCare AI is temporarily unavailable."
+        disclaimer: "⚠️ MahilaCare AI is temporarily unavailable."
       };
     }
 
@@ -260,7 +260,7 @@ ${schemaTemplate}
       if (Array.isArray(extracted)) rawFindings = extracted;
     }
 
-    const cleanFindings = (rawFindings || ["Report parameters parsed by NariCare AI."])
+    const cleanFindings = (rawFindings || ["Report parameters parsed by MahilaCare AI."])
       .map(f => stripQuestionsToAsk(stripCodeAndJsonFences(f)))
       .filter(f => f && !/\?$/.test(f));
     const cleanPrecautions = (parsed?.generalPrecautions || ["Maintain balanced nutrition and adequate rest.", "Keep records updated in your digital vault."])
@@ -269,7 +269,7 @@ ${schemaTemplate}
 
     return {
       error: false,
-      summary: summaryText || "NariCare AI report breakdown generated successfully.",
+      summary: summaryText || "MahilaCare AI report breakdown generated successfully.",
       keyFindings: cleanFindings,
       extractedValues: parsed?.extractedValues || parsed?.highlights || [],
       recommendedProducts: parsed?.recommendedProducts || [],
@@ -279,11 +279,11 @@ ${schemaTemplate}
         ? parsed.nextSteps.slice(0, 3).map(s => stripQuestionsToAsk(stripCodeAndJsonFences(s))).filter(s => s && !/\?$/.test(s))
         : [
             "Discuss report findings with a verified clinician during your next visit.",
-            "Log symptoms or notes in your NariCare Health Timeline."
+            "Log symptoms or notes in your MahilaCare Health Timeline."
           ],
       whenToSeekCare: seekCare,
       suggestsFollowup: typeof parsed?.suggestsFollowup === 'boolean' ? parsed.suggestsFollowup : false,
-      disclaimer: parsed?.disclaimer || "⚠️ NariCare AI provides health education based on reported data, not medical diagnosis."
+      disclaimer: parsed?.disclaimer || "⚠️ MahilaCare AI provides health education based on reported data, not medical diagnosis."
     };
   }
 }

@@ -94,7 +94,7 @@ const HealthTimelinePage = () => {
             <div className="flex items-center space-x-2">
               <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Health Vault</span>
               <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-800 text-[11px] font-bold">
-                NariCare Digital Vault
+                MahilaCare Digital Vault
               </span>
             </div>
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
@@ -307,7 +307,7 @@ const HealthTimelinePage = () => {
                     className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-purple-600 to-teal-500 text-white text-xs font-bold shadow-md hover:opacity-95 transition-all flex items-center space-x-1.5"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />
-                    <span>Explain Report with NariCare AI</span>
+                    <span>Explain Report with MahilaCare AI</span>
                   </button>
                 </div>
               </div>

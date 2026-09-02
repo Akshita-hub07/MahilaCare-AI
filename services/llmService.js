@@ -1,8 +1,8 @@
 /**
- * NariCare AI - LLM Service
+ * MahilaCare AI - LLM Service
  * Orchestrates natural-language healthcare queries, multi-turn context memory,
  * and application intent resolution using an extensible LLM Provider abstraction
- * while preserving NariCare's deterministic domain engines.
+ * while preserving MahilaCare's deterministic domain engines.
  */
 
 import { LocalAIProvider } from './providers/localAIProvider.js';
@@ -15,7 +15,7 @@ import { conversationMemory } from '../ai/conversationMemory.ts';
 import { userHealthStorage } from './userHealthStorage.js';
 
 const NARICARE_SYSTEM_INSTRUCTION = `
-You are NariCare AI, a 24/7 empathetic, expert conversational health & action assistant for women's healthcare.
+You are MahilaCare AI, a 24/7 empathetic, expert conversational health & action assistant for women's healthcare.
 
 CONVERSATIONAL & HEALTHCARE CAPABILITIES:
 1. Answer general health, medical, wellness, nutrition, pregnancy, PCOS, thyroid, and cycle questions naturally and clearly with appropriate medical explanations.
@@ -69,7 +69,7 @@ export class LLMService {
     pageContext = 'global',
     extraData = {}
   }) {
-    // 1. Build deterministic context from NariCare engines & stored user memory
+    // 1. Build deterministic context from MahilaCare engines & stored user memory
     const deterministicContext = this.buildDeterministicContext(
       prompt,
       language,
@@ -96,7 +96,7 @@ export class LLMService {
     const maxTokens = isReportRequest ? 550 : 350;
 
     const systemInstruction = isReportRequest
-      ? `You are NariCare AI, an expert clinical health assistant. Generate a detailed, multi-sentence health summary strictly matching the requested JSON schema.`
+      ? `You are MahilaCare AI, an expert clinical health assistant. Generate a detailed, multi-sentence health summary strictly matching the requested JSON schema.`
       : NARICARE_SYSTEM_INSTRUCTION;
 
     // Slice recent conversation history to 4 turns for fast prompt evaluation
@@ -114,7 +114,7 @@ export class LLMService {
     if (result.error) {
       return {
         error: true,
-        errorMessage: result.errorMessage || 'NariCare AI is temporarily unavailable. Please try again shortly.',
+        errorMessage: result.errorMessage || 'MahilaCare AI is temporarily unavailable. Please try again shortly.',
         status: result.status
       };
     }
@@ -128,7 +128,7 @@ export class LLMService {
   }
 
   /**
-   * Invokes NariCare's deterministic engines & retrieves user-scoped health memory
+   * Invokes MahilaCare's deterministic engines & retrieves user-scoped health memory
    */
   buildDeterministicContext(prompt, language, userProfile, pageContext, extraData) {
     // 1. Load active user's persistent health data from browser storage

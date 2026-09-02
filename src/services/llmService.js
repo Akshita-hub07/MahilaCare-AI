@@ -1,8 +1,8 @@
 /**
- * NariCare AI - LLM Service
+ * MahilaCare AI - LLM Service
  * Orchestrates natural-language healthcare queries, multi-turn context memory,
  * and application intent resolution using an extensible LLM Provider abstraction
- * while preserving NariCare's deterministic domain engines.
+ * while preserving MahilaCare's deterministic domain engines.
  */
 
 import { LocalAIProvider } from './providers/localAIProvider.js';
@@ -16,7 +16,7 @@ import { userHealthStorage } from './userHealthStorage.js';
 import { stripQuestionsToAsk } from '../utils/textCleaner.js';
 
 const NARICARE_SYSTEM_INSTRUCTION = `
-You are NariCare AI, a 24/7 empathetic, expert conversational health & action assistant for women's healthcare.
+You are MahilaCare AI, a 24/7 empathetic, expert conversational health & action assistant for women's healthcare.
 
 CONVERSATIONAL & HEALTHCARE CAPABILITIES:
 1. Answer general health, medical, wellness, nutrition, pregnancy, PCOS, thyroid, and cycle questions naturally and clearly with appropriate medical explanations.
@@ -70,7 +70,7 @@ export class LLMService {
     pageContext = 'global',
     extraData = {}
   }) {
-    // 1. Build deterministic context from NariCare engines & stored user memory
+    // 1. Build deterministic context from MahilaCare engines & stored user memory
     const deterministicContext = this.buildDeterministicContext(
       prompt,
       language,
@@ -101,9 +101,9 @@ export class LLMService {
     let systemInstruction = NARICARE_SYSTEM_INSTRUCTION;
 
     if (isReportRequest) {
-      systemInstruction = `You are NariCare AI, an expert clinical health assistant. Analyze ONLY the specific single report parameters and text content provided in the user query. Do NOT summarize the user's entire health history or combine unrelated past records. Explain what this specific report means in plain language, preserve all medical values, units, and dates exactly, and identify abnormal or important findings supported by the extracted report text strictly matching the requested JSON schema. DO NOT include any "Questions to ask your doctor" or question lists in the response.`;
+      systemInstruction = `You are MahilaCare AI, an expert clinical health assistant. Analyze ONLY the specific single report parameters and text content provided in the user query. Do NOT summarize the user's entire health history or combine unrelated past records. Explain what this specific report means in plain language, preserve all medical values, units, and dates exactly, and identify abnormal or important findings supported by the extracted report text strictly matching the requested JSON schema. DO NOT include any "Questions to ask your doctor" or question lists in the response.`;
     } else if (!isVoiceAssistant) {
-      systemInstruction = `You are NariCare AI, a 24/7 expert conversational health assistant.
+      systemInstruction = `You are MahilaCare AI, a 24/7 expert conversational health assistant.
 Provide detailed, comprehensive, and thorough medical explanations using all relevant user health context (cycle logs, pregnancy details, vitals, stored history) provided in the prompt.
 Give proper, in-depth clinical explanations and summaries rather than generic or brief answers.
 DO NOT ask any follow-up questions. DO NOT include any "Questions to ask your doctor", "Questions to consider", or question sections. DO NOT append trailing questions like "Would you like to...", "Do you have any other symptoms?", "Would you like to book an appointment?", or "Should we proceed?".
@@ -125,7 +125,7 @@ End your response cleanly with comprehensive, actionable medical guidance.`;
     if (result.error) {
       return {
         error: true,
-        errorMessage: result.errorMessage || 'NariCare AI is temporarily unavailable. Please try again shortly.',
+        errorMessage: result.errorMessage || 'MahilaCare AI is temporarily unavailable. Please try again shortly.',
         status: result.status
       };
     }
@@ -149,7 +149,7 @@ End your response cleanly with comprehensive, actionable medical guidance.`;
   }
 
   /**
-   * Invokes NariCare's deterministic engines & retrieves user-scoped health memory
+   * Invokes MahilaCare's deterministic engines & retrieves user-scoped health memory
    */
   buildDeterministicContext(prompt, language, userProfile, pageContext, extraData) {
     // 1. Load active user's persistent health data from browser storage

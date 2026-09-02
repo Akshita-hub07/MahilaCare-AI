@@ -223,7 +223,7 @@ const MenstrualCarePage = () => {
             <div className="flex items-center space-x-2">
               <span className="text-xs font-bold text-pink-600 uppercase tracking-wider">Hormonal & Cycle Intelligence</span>
               <span className="px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-800 text-[11px] font-bold">
-                NariCare AI Menstrual Companion 🌸
+                MahilaCare AI Menstrual Companion 🌸
               </span>
             </div>
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
@@ -273,7 +273,7 @@ const MenstrualCarePage = () => {
           <div className="flex items-center justify-between border-b border-purple-100 pb-3">
             <div className="flex items-center gap-2 text-purple-700 font-extrabold text-sm">
               <Sparkles className="w-5 h-5 text-purple-600" />
-              NariCare AI Menstrual Health Summary
+              MahilaCare AI Menstrual Health Summary
             </div>
             <button
               onClick={handleAnalyzeAI}
@@ -281,7 +281,7 @@ const MenstrualCarePage = () => {
               className="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow"
             >
               {isLoadingAI ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
-              <span>Generate NariCare AI Analysis 🌸</span>
+              <span>Generate MahilaCare AI Analysis 🌸</span>
             </button>
           </div>
 
@@ -289,14 +289,14 @@ const MenstrualCarePage = () => {
             <div className="p-6 rounded-2xl bg-purple-50/50 border border-purple-100 text-center space-y-2 animate-pulse">
               <RefreshCw className="w-6 h-6 text-purple-600 animate-spin mx-auto" />
               <p className="text-xs font-bold text-purple-900">
-                NariCare AI is analyzing your logged cycle parameters (Day {computedMetrics.currentDay}, Flow: {flowLevel}, Pain: {painLevel}/10, Symptoms: {loggedSymptoms.join(', ') || 'None'})...
+                MahilaCare AI is analyzing your logged cycle parameters (Day {computedMetrics.currentDay}, Flow: {flowLevel}, Pain: {painLevel}/10, Symptoms: {loggedSymptoms.join(', ') || 'None'})...
               </p>
             </div>
           ) : aiReport ? (
             aiReport.error ? (
               <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center space-x-2">
                 <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
-                <span>{aiReport.summary || 'NariCare AI is temporarily unavailable. Please try again shortly.'}</span>
+                <span>{aiReport.summary || 'MahilaCare AI is temporarily unavailable. Please try again shortly.'}</span>
               </div>
             ) : (
               <div className="space-y-4">
@@ -359,7 +359,7 @@ const MenstrualCarePage = () => {
             )
           ) : (
             <p className="text-xs text-slate-500 italic p-4 bg-slate-50 rounded-2xl">
-              Select your current cycle flow, pain level, and symptoms below, then click "Generate NariCare AI Analysis 🌸" to receive personalized insights powered by NariCare AI.
+              Select your current cycle flow, pain level, and symptoms below, then click "Generate MahilaCare AI Analysis 🌸" to receive personalized insights powered by MahilaCare AI.
             </p>
           )}
         </div>
@@ -524,7 +524,7 @@ const MenstrualCarePage = () => {
             className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl font-bold text-xs shadow hover:opacity-95 transition flex items-center justify-center gap-2"
           >
             {isLoadingAI ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            <span>Generate NariCare AI Analysis for Selected Options 🌸</span>
+            <span>Generate MahilaCare AI Analysis for Selected Options 🌸</span>
           </button>
         </div>
 

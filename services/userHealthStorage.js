@@ -1,5 +1,5 @@
 /**
- * NariCare User-Scoped Health Storage Engine
+ * MahilaCare User-Scoped Health Storage Engine
  * 
  * Provides prototype persistent storage using browser localStorage scoped
  * strictly to the authenticated user's ID/email namespace.
@@ -287,7 +287,7 @@ export const userHealthStorage = {
   },
 
   /**
-   * Saves conversation chat messages for NariCare AI continuity
+   * Saves conversation chat messages for MahilaCare AI continuity
    */
   saveAIChatHistory(user, chatMessages) {
     if (!user) return;

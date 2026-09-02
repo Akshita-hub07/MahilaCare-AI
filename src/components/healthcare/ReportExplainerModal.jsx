@@ -42,8 +42,8 @@ const ReportExplainerModal = ({ isOpen, onClose, reportRecord, onSaveAnalysis })
       setIsAnalyzing(false);
       setAnalysis({
         error: true,
-        summary: "⚠️ NariCare AI is temporarily unavailable. Please try again shortly.",
-        disclaimer: "⚠️ NariCare AI is temporarily unavailable."
+        summary: "⚠️ MahilaCare AI is temporarily unavailable. Please try again shortly.",
+        disclaimer: "⚠️ MahilaCare AI is temporarily unavailable."
       });
     });
   }, [isOpen, reportRecord, currentLang]);
@@ -80,9 +80,9 @@ const ReportExplainerModal = ({ isOpen, onClose, reportRecord, onSaveAnalysis })
             <Sparkles className="w-6 h-6 text-yellow-300 fill-yellow-300" />
           </div>
           <div>
-            <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">NariCare AI Report Breakdown</h3>
+            <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900">MahilaCare AI Report Breakdown</h3>
             <p className="text-xs text-purple-700 font-semibold truncate max-w-md">
-              NariCare AI Clinical Analysis • {reportRecord?.title || 'Report'}
+              MahilaCare AI Clinical Analysis • {reportRecord?.title || 'Report'}
             </p>
           </div>
         </div>
@@ -125,7 +125,7 @@ const ReportExplainerModal = ({ isOpen, onClose, reportRecord, onSaveAnalysis })
             <div className="py-16 text-center space-y-3">
               <div className="w-10 h-10 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
               <p className="text-xs font-extrabold text-purple-900">
-                NariCare AI is analyzing report parameters and generating personalized breakdown...
+                MahilaCare AI is analyzing report parameters and generating personalized breakdown...
               </p>
             </div>
           ) : analysis?.unextractableContent ? (
@@ -162,7 +162,7 @@ const ReportExplainerModal = ({ isOpen, onClose, reportRecord, onSaveAnalysis })
                   <span className="font-extrabold text-purple-900 text-sm">{analysis.overallStatus}</span>
                 </div>
                 <span className="px-3 py-1 rounded-full bg-purple-200 text-purple-950 text-[11px] font-extrabold">
-                  NariCare AI Verified
+                  MahilaCare AI Verified
                 </span>
               </div>
 
@@ -275,7 +275,7 @@ const ReportExplainerModal = ({ isOpen, onClose, reportRecord, onSaveAnalysis })
                     <div>
                       <h5 className="font-bold text-slate-900 text-xs sm:text-sm">Follow-Up Consultation Suggestion</h5>
                       <p className="text-xs text-slate-600 mt-0.5">
-                        Would you like to schedule a follow-up reminder in your NariCare Health Timeline?
+                        Would you like to schedule a follow-up reminder in your MahilaCare Health Timeline?
                       </p>
                     </div>
                   </div>
@@ -311,7 +311,7 @@ const ReportExplainerModal = ({ isOpen, onClose, reportRecord, onSaveAnalysis })
 
               {/* Section 7: Medical Disclaimer */}
               <div className="text-[11px] text-slate-400 font-medium italic border-t border-slate-100 pt-3">
-                {analysis.disclaimer || "⚠️ NariCare AI provides health education, not medical diagnosis."}
+                {analysis.disclaimer || "⚠️ MahilaCare AI provides health education, not medical diagnosis."}
               </div>
             </div>
           ) : null}

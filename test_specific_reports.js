@@ -10,7 +10,7 @@ async function testCase(name, prompt, maxTokens = 350) {
   
   const res = await provider.generateCompletion({
     prompt,
-    systemInstruction: `You are NariCare AI, a clinical health assistant. Generate a concise, grounded JSON report analysis strictly matching the requested JSON schema. Do NOT invent lab values, symptoms, or diagnoses.`,
+    systemInstruction: `You are MahilaCare AI, a clinical health assistant. Generate a concise, grounded JSON report analysis strictly matching the requested JSON schema. Do NOT invent lab values, symptoms, or diagnoses.`,
     temperature: 0.1,
     maxTokens
   });

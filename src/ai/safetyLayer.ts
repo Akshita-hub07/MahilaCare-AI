@@ -62,7 +62,7 @@ export class SafetyLayer {
         ];
 
     const disclaimer: Record<string, string> = {
-      en: "⚠️ Disclaimer: NariCare AI provides evidence-based health guidance for informational purposes. This does not constitute a formal clinical diagnosis or replace a doctor's evaluation.",
+      en: "⚠️ Disclaimer: MahilaCare AI provides evidence-based health guidance for informational purposes. This does not constitute a formal clinical diagnosis or replace a doctor's evaluation.",
       hi: "⚠️ अस्वीकरण: नारीकेयर AI केवल स्वास्थ्य जानकारी प्रदान करता है। यह डॉक्टर के औपचारिक इलाज या नैदानिक जांच का विकल्प नहीं है।",
       pa: "⚠️ ਬੇਦਾਅਵਾ: ਨਾਰੀਕੇਅਰ AI ਸਿਰਫ ਸਿਹਤ ਜਾਣਕਾਰੀ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ। ਇਹ ਡਾਕਟਰ ਦੀ ਜਾਂਚ ਦਾ ਵਿਕਲਪ ਨਹੀਂ ਹੈ।",
       bn: "⚠️ দাবিত্যাগ: নারী কেয়ার এআই শুধুমাত্র তথ্যমূলক নির্দেশিকা প্রদান করে, এটি ডাক্তারের পরীক্ষার বিকল্প নয়।",

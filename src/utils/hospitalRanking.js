@@ -1,6 +1,6 @@
 /**
- * AI Hospital Ranking & Suitability Scoring Engine
- * Compares healthcare centers based on distance, female-friendly score, privacy, wait times, and user preferences.
+ * AI Hospital Ranking & Geographic Suitability Scoring Engine for MahilaCare AI
+ * Calculates exact Haversine distances from active user location and strictly filters by selected radius.
  */
 
 export const MOCK_HOSPITALS = [
@@ -9,17 +9,18 @@ export const MOCK_HOSPITALS = [
     name: 'Apollo Women & Child Specialty Hospital',
     type: 'Multi-Specialty Hospital',
     image: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600',
-    distanceKm: 2.4,
+    lat: 12.9780,
+    lng: 77.6400,
     address: '12th Main Road, Indiranagar, Bengaluru',
     openStatus: 'Open 24/7',
     rating: 4.9,
     reviewsCount: 480,
-    femaleFriendlyScore: 98, // %
-    privacyScore: 96, // %
+    femaleFriendlyScore: 98,
+    privacyScore: 96,
     waitTimeMins: 12,
     homeDiagnosisAvailable: true,
-    services: ['Female Gynecologists', 'NICU & Maternity', 'Ultrasound & MRI', 'Doorstep Blood Collection', '24/7 Ambulance'],
-    doctorList: ['Dr. Priya Nair (Gynecologist)', 'Dr. Anjali Gupta (Fetal Medicine)'],
+    services: ['High-Risk Pregnancy Suite', 'Fetal Echocardiography & Doppler', 'Preeclampsia Management'],
+    doctorList: ['Dr. Priya Nair (Senior Gynecologist)', 'Dr. Anjali Gupta (Fetal Medicine)'],
     consultFee: 800
   },
   {
@@ -27,8 +28,9 @@ export const MOCK_HOSPITALS = [
     name: 'Cloudnine Maternity & Wellness Hospital',
     type: 'Women & Child Super-Specialty',
     image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600',
-    distanceKm: 4.1,
-    address: '100 Feet Road, Koramangala, Bengaluru',
+    lat: 12.9568,
+    lng: 77.6482,
+    address: 'Old Airport Road, Kodihalli, Bengaluru',
     openStatus: 'Open 24/7',
     rating: 4.8,
     reviewsCount: 390,
@@ -36,17 +38,18 @@ export const MOCK_HOSPITALS = [
     privacyScore: 95,
     waitTimeMins: 18,
     homeDiagnosisAvailable: true,
-    services: ['PCOS Clinic', 'High-Risk Pregnancy Care', 'Lactation Consultation', 'Home Diagnostics'],
+    services: ['Advanced IVF & ICSI Lab', 'Egg Freezing & Embryo Banking', 'Hormonal Ovulation Induction'],
     doctorList: ['Dr. Sunita Reddy (Senior Obstetrician)'],
     consultFee: 1200
   },
   {
     id: 'hosp-3',
-    name: 'Nari Wellness & Fertility Clinic',
-    type: 'Specialized Women Clinic',
+    name: 'MahilaCare Partner Diagnostic & Gynec Center',
+    type: 'Diagnostic & Women Clinic',
     image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=600',
-    distanceKm: 6.8,
-    address: '27th Main, HSR Layout, Bengaluru',
+    lat: 12.9352,
+    lng: 77.6245,
+    address: '100 Feet Road, Koramangala, Bengaluru',
     openStatus: 'Closes at 8:00 PM',
     rating: 4.7,
     reviewsCount: 210,
@@ -54,17 +57,37 @@ export const MOCK_HOSPITALS = [
     privacyScore: 92,
     waitTimeMins: 10,
     homeDiagnosisAvailable: true,
-    services: ['Fertility & IVF', 'Hormonal Wellness', 'Preventive Mammography', 'Female Doctors Only'],
+    services: ['PCOS & Thyroid Blood Panels', 'Digital Mammography Scans', '3D Pelvic Ultrasound'],
     doctorList: ['Dr. Meera Deshmukh (Reproductive Endocrinology)'],
     consultFee: 950
   },
   {
     id: 'hosp-4',
-    name: 'Fortis La Femme Hospital',
-    type: 'Super-Specialty Hospital',
+    name: 'Manipal Hospital Women Unit',
+    type: 'Multi-Speciality Hospital',
     image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&q=80&w=600',
-    distanceKm: 9.2,
-    address: 'Richmond Road, Central Bengaluru',
+    lat: 12.9299,
+    lng: 77.5824,
+    address: '3rd Block, Jayanagar, Bengaluru',
+    openStatus: 'Open 24/7',
+    rating: 4.9,
+    reviewsCount: 520,
+    femaleFriendlyScore: 97,
+    privacyScore: 94,
+    waitTimeMins: 15,
+    homeDiagnosisAvailable: true,
+    services: ['3D Keyhole Gynec Surgery', 'Endometriosis Excision', 'Uterine Fibroid Embolization'],
+    doctorList: ['Dr. Sudha Ramachandran (Gynecologist)', 'Dr. Reena Patel (Obstetrician)'],
+    consultFee: 1000
+  },
+  {
+    id: 'hosp-5',
+    name: 'Fortis La Femme Speciality Center',
+    type: 'Super-Specialty Hospital',
+    image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600',
+    lat: 12.9611,
+    lng: 77.6012,
+    address: 'Richmond Road, Richmond Town, Bengaluru',
     openStatus: 'Open 24/7',
     rating: 4.6,
     reviewsCount: 310,
@@ -72,61 +95,81 @@ export const MOCK_HOSPITALS = [
     privacyScore: 91,
     waitTimeMins: 25,
     homeDiagnosisAvailable: false,
-    services: ['Robotic Gynecologic Surgery', 'Oncology', 'Routine OPD'],
+    services: ['Colposcopy & Pap Smear Screening', 'HPV Vaccination & Cervical Clinic', 'Ovarian Cancer Screening'],
     doctorList: ['Dr. Kavita Rao (Gynecologist)'],
     consultFee: 1100
+  },
+  {
+    id: 'hosp-6',
+    name: "St. John's Medical College & Women Hospital",
+    type: 'Medical College & Hospital',
+    image: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600',
+    lat: 12.9281,
+    lng: 77.6189,
+    address: 'Sarjapur Road, Koramangala, Bengaluru',
+    openStatus: 'Open 24/7',
+    rating: 4.8,
+    reviewsCount: 610,
+    femaleFriendlyScore: 95,
+    privacyScore: 93,
+    waitTimeMins: 20,
+    homeDiagnosisAvailable: true,
+    services: ['Level-3 Neonatal ICU (NICU)', 'Kangaroo Mother Care Unit', 'Infant Pediatric Cardiology'],
+    doctorList: ['Dr. Sister Mary Joseph', 'Dr. Ramesh Kumar'],
+    consultFee: 650
   }
 ];
 
-export const computeHospitalSuitabilityScore = (hospital, userPreferences = {}) => {
-  let score = 70; // Base score
+/**
+ * Calculates approximate geographic distance (km) using Haversine formula
+ */
+export function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in kilometers
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
 
-  // 1. Distance suitability (Max 15 points)
-  const maxRadiusKm = parseInt(userPreferences.radius, 10) || 10;
-  if (hospital.distanceKm <= maxRadiusKm) {
-    score += (1 - hospital.distanceKm / maxRadiusKm) * 15;
-  } else {
-    score -= 10; // Outside radius penalty
-  }
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
 
-  // 2. Female Friendly Infrastructure (Max 15 points)
-  score += (hospital.femaleFriendlyScore / 100) * 15;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const rawDist = R * c;
 
-  // 3. User Preference Alignment
-  if (userPreferences.femaleDoctorsOnly && hospital.femaleFriendlyScore >= 92) {
-    score += 5;
-  }
-  if (userPreferences.homeDiagnostics && hospital.homeDiagnosisAvailable) {
-    score += 5;
-  }
+  // Round to 1 decimal place with minimum 0.5 km threshold for display realism
+  return Math.max(0.5, Math.round(rawDist * 10) / 10);
+}
 
-  // 4. Rating & Reviews (Max 10 points)
-  score += (hospital.rating / 5) * 10;
+/**
+ * Ranks hospitals based on geographic distance from user location and radius filter
+ */
+export function getRankedHospitals(radiusFilter = '10 km', userCoords = { lat: 12.9716, lng: 77.5946 }, userPreferences = {}) {
+  const maxRadiusKm = parseFloat(radiusFilter) || 10;
+  const { lat: userLat, lng: userLng } = userCoords;
 
-  // 5. Waiting Time Factor
-  if (hospital.waitTimeMins <= 15) {
-    score += 5;
-  }
+  // Calculate exact Haversine distance & filter strictly within maxRadiusKm
+  const filtered = MOCK_HOSPITALS.map((hosp) => {
+    const distKm = calculateHaversineDistance(userLat, userLng, hosp.lat, hosp.lng);
 
-  // Clamp score between 60% and 99%
-  const finalPercent = Math.min(99, Math.max(60, Math.round(score)));
-  return finalPercent;
-};
+    // Compute AI Suitability Score (Distance + Rating + Female Friendly Score)
+    const distancePenalty = Math.min(30, distKm * 3);
+    const suitabilityScore = Math.min(99, Math.max(70, Math.round(
+      (hosp.femaleFriendlyScore * 0.4) +
+      (hosp.rating * 10 * 0.3) +
+      (100 - distancePenalty) * 0.3
+    )));
 
-export const getRankedHospitals = (radiusKm = '10 km', userPreferences = {}) => {
-  const radiusNum = parseInt(radiusKm, 10) || 10;
+    return {
+      ...hosp,
+      distanceKm: distKm,
+      suitabilityScore
+    };
+  }).filter((hosp) => hosp.distanceKm <= maxRadiusKm);
 
-  // Filter within radius
-  const filtered = MOCK_HOSPITALS.filter(h => h.distanceKm <= radiusNum + 1.0);
+  // Sort strictly by distance (nearest first)
+  filtered.sort((a, b) => a.distanceKm - b.distanceKm);
 
-  // Compute suitability scores
-  const scored = filtered.map(h => ({
-    ...h,
-    suitabilityScore: computeHospitalSuitabilityScore(h, { ...userPreferences, radius: radiusKm })
-  }));
-
-  // Sort highest suitability score first
-  scored.sort((a, b) => b.suitabilityScore - a.suitabilityScore);
-
-  return scored;
-};
+  return filtered;
+}
